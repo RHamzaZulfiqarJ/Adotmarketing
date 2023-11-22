@@ -181,6 +181,14 @@ const Sidebar = ({ showSidebar, setShowSidebar }) => {
       childrens: [],
     },
     {
+      id: 3,
+      title: "Inventories",
+      icon: <PiFoldersLight className="text-[25px]" />,
+      link: "/inventories",
+      role: ["employee", "manager", "super_admin"],
+      childrens: [],
+    },
+    {
       id: 4,
       title: "To Do Tasks",
       icon: <PiListChecksLight className="text-[25px]" />,
