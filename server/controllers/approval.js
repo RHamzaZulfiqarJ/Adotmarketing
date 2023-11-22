@@ -11,7 +11,7 @@ export const getApproval = async (req, res, next) => {
     try {
 
         const { approvalId } = req.params
-        const findedApproval = await Approval.findById(approvalId)
+        const findedApproval = await Approval.findById(approvalId).populate('project').exec()
         if (!findedApproval) return next(createError(401, 'Approval not exist'))
 
         res.status(200).json({ result: findedApproval, message: 'approval fetched seccessfully', success: true })
@@ -26,7 +26,7 @@ export const getApprovals = async (req, res, next) => {
 
         const { type } = req.query
 
-        const approvals = type ? await Approval.find({ type }) : await Approval.find()
+        const approvals = type ? await Approval.find({ type }) : await Approval.find().populate('project').exec()
         res.status(200).json({ result: approvals, message: 'approvals fetched seccessfully', success: true })
 
     } catch (err) {

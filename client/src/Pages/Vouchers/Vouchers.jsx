@@ -59,11 +59,11 @@ function Vouchers() {
       renderCell: (params) => <div className="font-primary">{params.row.issuingDate}</div>,
     },
     {
-      field: "type",
-      headerName: "Payment Type",
+      field: "project",
+      headerName: "Project",
       width: 180,
       headerClassName: "super-app-theme--header",
-      renderCell: (params) => <div className="font-primary capitalize">{params.row.type}</div>,
+      renderCell: (params) => <div className="font-primary capitalize">{params.row?.project?.title}</div>,
     },
     {
       field: "status",

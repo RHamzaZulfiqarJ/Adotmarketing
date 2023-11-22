@@ -41,7 +41,7 @@ function VoucherApprovals() {
       headerName: "Project",
       width: 150,
       headerClassName: "super-app-theme--header",
-      renderCell: (params) => <div className="font-primary">{params.row?.data?.paid}</div>,
+      renderCell: (params) => <div className="font-primary">{params.row?.project}</div>,
     },
     {
       field: "CNIC",

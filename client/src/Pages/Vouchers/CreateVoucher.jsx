@@ -101,9 +101,11 @@ const CreateVoucher = ({ open, setOpen, scroll, downloadPdf, loader }) => {
 
 
     dispatch(createVoucher(voucherData, setOpen));
+    setVoucherData(initialVoucherState);
   };
 
   const handleClose = () => {
+    setVoucherData(initialVoucherState);
     setOpen(false);
   };
 
@@ -118,8 +120,8 @@ const CreateVoucher = ({ open, setOpen, scroll, downloadPdf, loader }) => {
   ];
 
   const handleRemainingAmount = () => {
-    const [number1, postfix1] = voucherData.total.split(" ");
-    const [number2, postfix2] = voucherData.paid.split(" ");
+    const [number1, postfix1] = voucherData?.total.split(" ");
+    const [number2, postfix2] = voucherData?.paid.split(" ");
     const total = parseInt(number1);
     const paid = parseInt(number2);
     const remained = total - paid;
