@@ -135,12 +135,14 @@ export const getFollowUpsStats = async (req, res, next) => {
         const followUps = await FollowUp.find()
             .populate({
                 path: 'leadId',
-                populate: {
-                    path: 'client',
-                    path: 'property',
-                    path: 'allocatedTo',
-                }
-            });
+                populate: [
+                    { path: 'client' },
+                    { path: 'property' },
+                    { path: 'allocatedTo' },
+                ],
+            }).exec();
+
+            console.log(followUps)
 
         const reducedFollowUps = followUps.reduce((result, followUp) => {
             const followUpDate = new Date(followUp.followUpDate).toLocaleDateString();

@@ -24,9 +24,11 @@ export const getApproval = async (req, res, next) => {
 export const getApprovals = async (req, res, next) => {
     try {
 
-        const { type } = req.query
+        const { type } = req.query;
 
-        const approvals = type ? await Approval.find({ type }) : await Approval.find().populate('project').exec()
+        let query = type ? { type } : {};
+        const approvals = await Approval.find(query).populate('data.project').exec()
+
         res.status(200).json({ result: approvals, message: 'approvals fetched seccessfully', success: true })
 
     } catch (err) {

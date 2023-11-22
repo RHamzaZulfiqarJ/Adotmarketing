@@ -44,7 +44,7 @@ const LeadsStat = () => {
  
 
   ////////////////////////////////////////////// STATES //////////////////////////////////////////////////////
-  const [type, setType] = useState('status')  // status, priority, property, source
+  const [type, setType] = useState('priority')  // status, priority, property, source
 
   ////////////////////////////////////////////// USE EFFECTS //////////////////////////////////////////////////////
   useEffect(() => {
@@ -72,14 +72,13 @@ const LeadsStat = () => {
                 paddingTop: "8px",
               }}></InputLabel>
           ) : null}
-          <Select
+         <Select
             style={{ fontFamily: "'Montserrat', sans-serif" }}
             value={type}
             onChange={handleChange}
             fullWidth
             size="small">
-            <MenuItem value="degree">Degree Vise</MenuItem>
-            <MenuItem value="visa">VISA Vise</MenuItem>
+            <MenuItem value="property">Projects Vise</MenuItem>
             <MenuItem value="status">Status Vise</MenuItem>
             <MenuItem value="priority">Priority Vise</MenuItem>
             <MenuItem value="source">Source Wise</MenuItem>

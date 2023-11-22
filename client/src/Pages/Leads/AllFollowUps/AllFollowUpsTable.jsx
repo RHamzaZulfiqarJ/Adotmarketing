@@ -70,14 +70,32 @@ const AllFollowUpsTable = () => {
       renderCell: (params) => <div className="font-primary font-light">{params.row.uid}</div>,
     },
     {
-      field: "leadId?.source",
-      headerName: "Source",
+      field: "leadId?.allocatedTo",
+      headerName: "Staff",
       headerClassName: "super-app-theme--header",
       width: 100,
       renderCell: (params) => (
-        <Tooltip title={params.row.leadId?.source} arrow placement="bottom">
-          <div className="font-primary font-light capitalize">{params.row.leadId?.source}</div>
-        </Tooltip>
+        <>
+          {params.row?.leadId?.allocatedTo?.length > 1
+            ? params.row?.leadId?.allocatedTo?.map((item, key) => (
+                <Tooltip
+                  className="capitalize flex gap-2 font-primary font-light"
+                  key={key}
+                  title={`• ${item?.firstName}`}
+                  arrow>
+                  • {item?.firstName}
+                </Tooltip>
+              ))
+            : params.row?.leadId?.allocatedTo?.map((item, key) => (
+                <Tooltip
+                  className="capitalize flex gap-2 font-primary font-light"
+                  key={key}
+                  title={item?.firstName}
+                  arrow>
+                  {item?.firstName}
+                </Tooltip>
+              ))}
+        </>
       ),
     },
     {
@@ -87,7 +105,9 @@ const AllFollowUpsTable = () => {
       width: 130,
       renderCell: (params) => (
         <Tooltip title={params.row?.leadId?.property?.title} arrow placement="bottom">
-          <div className="font-primary font-light capitalize">{params.row?.leadId?.property?.title}</div>
+          <div className="font-primary font-light capitalize">
+            {params.row?.leadId?.property?.title}
+          </div>
         </Tooltip>
       ),
     },
@@ -130,8 +150,39 @@ const AllFollowUpsTable = () => {
       headerClassName: "super-app-theme--header",
       width: 150,
       renderCell: (params) => (
-        <Tooltip title={params.row?.status} arrow placement="bottom">
-          <div className="font-primary font-light">{params.row.status}</div>
+        <Tooltip title={params.row.status ? params.row.status : params.row?.leadId?.status} arrow placement="bottom">
+          <div
+            className={`font-primary font-light border-[1px] rounded-full py-1 px-2 ${
+              params.row?.status == "New Lead"
+                ? "text-red-400 border-red-400"
+                : params.row?.status == "Call Not Answer"
+                ? "text-yellow-400 border-yellow-400"
+                : params.row?.status == "Deal Done"
+                ? "text-green-400 border-green-400"
+                : params.row?.status == "Keen Interested"
+                ? "text-blue-400 border-blue-400"
+                : params.row?.status == "Visit Done"
+                ? "text-purple-400 border-purple-400"
+                : params.row?.status == "Contact in Future"
+                ? "text-cyan-400 border-cyan-400"
+                : params.row?.status == "Visit Schedule"
+                ? "text-pink-400 border-pink-400"
+                : params.row?.status == "Archived"
+                ? "text-rose-700 border-rose-700"
+                : params.row?.status == "Wrong Number"
+                ? "text-amber-700 border-amber-700"
+                : params.row?.status == "Busy"
+                ? "text-emerald-700 border-emerald-700"
+                : params.row?.status == "Number Off"
+                ? "text-info border-info"
+                : params.row?.status == "Call back Later"
+                ? "text-yellow-600 border-yellow-600"
+                : params.row?.status == "Interested"
+                ? "text-success border-success"
+                : "text-red-400 border-red-400"
+            }`}>
+            {params.row.status ? params.row.status : params.row?.leadId?.status}
+          </div>
         </Tooltip>
       ),
     },
