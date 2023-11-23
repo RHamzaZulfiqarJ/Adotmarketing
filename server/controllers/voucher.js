@@ -38,9 +38,9 @@ export const getEmployeeVouchers = async (req, res, next) => {
 export const createVoucher = async (req, res, next) => {
     try {
 
-        const { branch, propertyType, area, project, issuingDate, dueDate, clientName, CNIC, phone, type, total, paid, remained } = req.body
+        const { branch, propertyType, area, project, issuingDate, dueDate, clientName, CNIC, phone, type, total, paid, remained, note } = req.body
         
-        const newVoucher = await Voucher.create({ branch, propertyType, area, project, issuingDate, dueDate, clientName, CNIC, phone, type, total, paid, remained })
+        const newVoucher = await Voucher.create({ branch, propertyType, area, project, issuingDate, dueDate, clientName, CNIC, phone, type, total, paid, remained, note })
         res.status(200).json({ result: newVoucher, message: 'voucher created successfully', success: true })
 
     } catch (err) {

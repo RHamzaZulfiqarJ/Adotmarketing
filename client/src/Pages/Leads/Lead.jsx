@@ -98,7 +98,7 @@ const Lead = () => {
                       {
                         currentLead?.allocatedTo?.length > 1 ? (
                           currentLead?.allocatedTo?.map((item, key) => (
-                            <Tooltip className="capitalize flex gap-2" key={key} title={`• ${item?.firstName}`} arrow>• {item?.firstName}</Tooltip>
+                            <Tooltip className="capitalize flex gap-2" key={key} title={`• ${console.log(item?.firstName)}`} arrow>• {item?.firstName}</Tooltip>
                           ))
                         ) : (
                           currentLead?.allocatedTo?.map((item, key) => (
