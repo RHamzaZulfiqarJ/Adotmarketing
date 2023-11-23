@@ -2,15 +2,16 @@ import { generateUniqueIdentifier } from '../utils/utils.js'
 import { Schema, model } from 'mongoose'
 
 const inventorySchema = Schema({
-    sellerName: { type: String, required: true },
-    sellerPhone: { type: String, required: true },
+    sellerName: { type: String, required: false },
+    sellerPhone: { type: String, required: false },
     sellerEmail: { type: String },
     sellerCompamyName: { type: String },
-    sellerCity: { type: String, required: true },
+    sellerCity: { type: String, required: false },
+    employeeId: { type: Schema.Types.ObjectId, ref: 'User' },
     project: { type: Schema.Types.ObjectId, ref: 'Project' },
-    propertyStreetNumber: { type: String, required: true },
-    propertyNumber: { type: String, required: true },       // Plot/Shop/Appartment Number
-    price: { type: String, required: true },
+    propertyStreetNumber: { type: String, required: false },
+    propertyNumber: { type: String, required: false },       // Plot/Shop/Appartment Number
+    price: { type: String, required: false },
     remarks: { type: String },
     status: { type: String, default: 'unsold', enum: ['sold', 'unsold', 'underProcess'] },
     isArchived: { type: Boolean, default: false },

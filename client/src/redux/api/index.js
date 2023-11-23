@@ -88,6 +88,7 @@ export const deleteSociety = (societyId) => API.delete(`/society/delete/${societ
 // INVENTORY
 export const getInventory = (inventoryId) => API.get(`/inventory/get/single/${inventoryId}`)
 export const getInventories = () => API.get(`/inventory/get/all`)
+export const getEmployeeInventories = () => API.get(`/inventory/get/employee`)
 export const searchInventory = (searchTerm, isArchived) => API.get(`/inventory/search?searchTerm=${searchTerm}`, { isArchived })
 export const filterInventory = (filters) => API.get(`/inventory/filter?${objectToQueryString(filters)}`)
 export const createInventory = (inventoryData) => API.post(`/inventory/create`, inventoryData)
@@ -121,8 +122,6 @@ export const deleteEvent = (eventId) => API.delete(`/event/delete/${eventId}`)
 // APROVAL
 export const getApprovals = (type, leadId) => API.get(`/approval/get/all?type=${type}`)
 export const getApproval = () => API.get(`/approval/get/single/${approvalId}`)
-export const createRequestApproval = (data) => API.post(`/approval/create/request`, data)
-export const rejectRequestApproval = (email) => API.post(`/approval/reject/request`, { email })
 export const createVoucherApproval = (data) => API.post(`/approval/create/voucher`, data)
 export const acceptVoucherApproval = (approvalId, password) => API.post(`/approval/accept/voucher/${approvalId}`, { password })
 export const rejectVoucherApproval = (approvalId, password) => API.post(`/approval/reject/voucher/${approvalId}`, { password })

@@ -99,9 +99,7 @@ const CreateVoucher = ({ open, setOpen, scroll, downloadPdf, loader }) => {
     // )
     //   return alert("Make sure to provide all the fields");
 
-
-    dispatch(createVoucher(voucherData, setOpen));
-    setVoucherData(initialVoucherState);
+    dispatch(createVoucher(voucherData, setOpen, projects));
   };
 
   const handleClose = () => {
@@ -125,7 +123,10 @@ const CreateVoucher = ({ open, setOpen, scroll, downloadPdf, loader }) => {
     const total = parseInt(number1);
     const paid = parseInt(number2);
     const remained = total - paid;
-    return remained + " " + postfix2;
+    if(isNaN(remained)) return ""
+    
+    if(postfix2 == undefined) return remained
+    return remained + " " + postfix2
   }
 
   return (

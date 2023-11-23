@@ -6,6 +6,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { format, parseISO } from "date-fns";
 import { getDeductions } from "../../redux/action/deduction";
+import QRCode from 'qrcode.react'
 
 const TranscriptPage = ({ }) => {
   ////////////////////////////////////// VARIABLES ///////////////////////////////////
@@ -54,7 +55,7 @@ const TranscriptPage = ({ }) => {
   return (
     <div ref={pdfRef} className="completePdfPage w-full my-4 font-primary">
       <div className="flex justify-center">
-        <img className="h-12" src="/background/A-consultant-logo.png" alt="" />
+        <img className="h-16" src="/images/adotmarketinglogo.png" alt="" />
       </div>
       <div className="my-10 flex justify-center">
         <table className="flex flex-col gap-4">
@@ -106,6 +107,15 @@ const TranscriptPage = ({ }) => {
             <div className="text-lg font-semibold">{currentTranscript?.netSalary}</div>
             <div className="text-lg capitalize">{numberToWords.toWords(currentTranscript?.netSalary)}</div>
         </div>
+      </div>
+
+      <div className="flex justify-center mt-4">
+        <QRCode value={`Name: ${currentTranscript?.employeeName} \nPhone: ${currentTranscript?.phone} \nSalary Earned: ${currentTranscript?.netSalary} \nTotal Deductions: ${currentTranscript?.lateArrivals * deductions[0]?.lateArrivals + currentTranscript?.halfDays * deductions[0]?.halfDays + currentTranscript?.dayOffs * currentTranscript?.amountPerDayOff}`} />
+      </div>
+
+      <div className="flex justify-center flex-col py-2">
+          <p className="text-center">&copy; Right Reserverd by A. Marketing</p>
+          <p className="text-center">2nd Floor, Plaza 6-A, Vilas Road, Main Boulevard, Park View City, Lahore</p>
       </div>
     </div>
   );
