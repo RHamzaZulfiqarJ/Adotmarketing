@@ -149,7 +149,7 @@ const CreateLead = ({ setOpen, open, scroll }) => {
             <Divider />
             <table className="mt-4">
               <tr>
-                <td className="pb-4 text-lg">Client Name </td>
+                <td className="pb-4 text-lg">Client Name <span className="text-red-400">*</span> </td>
                 <td className="pb-4">
                   <TextField
                     name="clientName"
@@ -162,7 +162,7 @@ const CreateLead = ({ setOpen, open, scroll }) => {
                 </td>
               </tr>
               <tr>
-                <td className="pb-4 text-lg">Phone </td>
+                <td className="pb-4 text-lg">Phone <span className="text-red-400">*</span> </td>
                 <td className="pb-4">
                   <TextField
                     name="clientPhone"
@@ -202,7 +202,7 @@ const CreateLead = ({ setOpen, open, scroll }) => {
                 </td>
               </tr>
               <tr>
-                <td className="pb-4 text-lg">Project </td>
+                <td className="pb-4 text-lg">Project <span className="text-red-400">*</span> </td>
                 <td className="pb-4">
                   <CFormSelect
                     value={leadData.property}

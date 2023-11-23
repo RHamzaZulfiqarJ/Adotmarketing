@@ -137,7 +137,7 @@ const VoucherPage = ({ }) => {
         </div>
         
         <div className="flex justify-center flex-col py-2">
-          <p className="text-center">&copy; Right Reserverd by A. Consultant</p>
+          <p className="text-center">&copy; Right Reserverd by A. Marketing</p>
           <p className="text-center">2nd Floor, Plaza 6-A, Vilas Road, Main Boulevard, Park View City, Lahore</p>
         </div>
       </div>
