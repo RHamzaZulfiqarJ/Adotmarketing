@@ -73,6 +73,7 @@ const Topbar = ({ view, setView, setIsFiltered, isFiltered }) => {
               <FormControl>
                 <Input
                   name="search"
+                  onChange={(e) => handleSearch(e.target.value)}
                   placeholder="Search Employees"
                   startAdornment={
                     <InputAdornment position="start">
@@ -109,6 +110,7 @@ const Topbar = ({ view, setView, setIsFiltered, isFiltered }) => {
             <div className="bg-[#ebf2f5] hover:bg-[#dfe6e8] p-1 pl-2 pr-2 rounded-md w-auto">
               <FormControl>
                 <Input
+                  onChange={(e) => handleSearch(e.target.value)}
                   name="search"
                   fullWidth="true"
                   placeholder="Search Clients"

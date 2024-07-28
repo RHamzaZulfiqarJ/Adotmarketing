@@ -11,7 +11,7 @@ const ClientHeader = () => {
           <div className="flex justify-between items-center flex-grow-[1]">
             <div className="flex flex-col justify-start">
               <Link to="/client/dashboard">
-                <img src="/favicon/GrowLOGO.png" />
+                <img src="/images/adotmarketinglogo.png" />
               </Link>
             </div>
             <div className="flex justify-end items-center gap-[40px] font-thin">

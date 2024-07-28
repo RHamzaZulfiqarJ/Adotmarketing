@@ -7,7 +7,7 @@ const router = express.Router()
 // GET
 router.get('/get/single/:inventoryId', verifyToken, getInventory)
 router.get('/get/all', verifyToken, verifyEmployee, getInventories)
-router.get('/get/employee', verifyToken, verifyEmployee, getEmployeeInventories)
+router.get('/get/employee', verifyToken, getEmployeeInventories)
 router.get('/search', verifyToken, verifyEmployee, searchInventory)
 router.get('/filter', verifyToken, verifyEmployee, filterInventory)
 

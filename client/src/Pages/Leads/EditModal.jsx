@@ -15,6 +15,7 @@ import {
 import { PiNotepad, PiUser, PiXLight } from "react-icons/pi";
 import { CFormSelect } from "@coreui/react";
 import { getLeadReducer } from "../../redux/reducer/lead";
+import { getProjects } from "../../redux/action/project";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="down" ref={ref} {...props} />;
@@ -24,6 +25,7 @@ const EditModal = ({ open, setOpen, scroll, leadId }) => {
   ////////////////////////////////////// VARIABLES  /////////////////////////////////////
   const dispatch = useDispatch();
   const { currentLead, isFetching } = useSelector((state) => state.lead);
+  const { projects } = useSelector((state) => state.project);
   const { employees, loggedUser } = useSelector((state) => state.user);
   const priorities = [
     { name: "Very Cold", value: "veryCold" },
@@ -33,16 +35,14 @@ const EditModal = ({ open, setOpen, scroll, leadId }) => {
     { name: "Very Hot", value: "veryHot" },
   ];
   const statuses = [
-    { name: "Closed (Lost)", value: "closedLost" },
-    { name: "Followed Up (Call)", value: "followedUpCall" },
-    { name: "Contacted Client (Call Attempt)", value: "contactedCallAttempt" },
-    { name: "Contacted Client (Call)", value: "contactedCall" },
-    { name: "Followed Up (Email)", value: "followedUpEmail" },
-    { name: "Contacted Client (Email)", value: "contactedEmail" },
-    { name: "New", value: "new" },
-    { name: "Meeting (Done)", value: "meetingDone" },
+    { name: "New Client", value: "newClient" },
+    { name: "Follow Up", value: "followUp" },
+    { name: "Contacted Client", value: "contactedClient" },
+    { name: "Call Not Attend", value: "callNotAttend" },
+    { name: "Visit Schedule", value: "visitSchedule" },
+    { name: "Visit Done", value: "visitDone" },
     { name: "Closed (Won)", value: "closedWon" },
-    { name: "Meeting (Attempt)", value: "meetingAttempt" },
+    { name: "Closed (Lost)", value: "closedLost" },
   ];
   const sources = [
     { name: "Instagram", value: "instagram" },
@@ -78,7 +78,7 @@ const EditModal = ({ open, setOpen, scroll, leadId }) => {
     source: "",
     description: "",
   };
-  ////////////////////////////////////// STATES  /////////////////////////////////////
+  ////////////////////////////////////// STATES  //////////////////////////////////////////
   const [leadData, setLeadData] = useState({
     ...currentLead,
     clientName: currentLead?.client?.clientName,
@@ -97,6 +97,10 @@ const EditModal = ({ open, setOpen, scroll, leadId }) => {
   useEffect(() => {
     leadId && dispatch(getLead(leadId));
   }, [leadId]);
+
+  useEffect(() => {
+    dispatch(getProjects());
+  }, []);
 
   ////////////////////////////////////// FUNCTIONS  /////////////////////////////////////
   const handleSubmit = (e) => {
@@ -159,8 +163,11 @@ const EditModal = ({ open, setOpen, scroll, leadId }) => {
                 <td className="pb-4 text-lg">Client Name </td>
                 <td className="pb-4">
                   <TextField
-                    value={leadData?.clientName}
-                    name="clientName"
+                    value={
+                      leadData?.clientName || leadData?.client?.firstName
+                    }
+                    disabled
+                    name={"clientName"}
                     onChange={(e) => handleChange("clientName", e.target.value)}
                     size="small"
                     fullWidth
@@ -171,9 +178,10 @@ const EditModal = ({ open, setOpen, scroll, leadId }) => {
                 <td className="pb-4 text-lg">Phone </td>
                 <td className="pb-4">
                   <TextField
+                    disabled
                     name="clientPhone"
                     onChange={(e) => handleChange("clientPhone", e.target.value)}
-                    value={leadData?.clientPhone}
+                    value={leadData?.clientPhone || leadData?.client?.phone}
                     type="number"
                     size="small"
                     fullWidth
@@ -191,63 +199,32 @@ const EditModal = ({ open, setOpen, scroll, leadId }) => {
             <Divider />
             <table className="mt-4">
               <tr>
-                <td className="pb-4 text-lg">Country </td>
+                <td className="pb-4 text-lg">City </td>
                 <td className="pb-4">
                   <CFormSelect
-                    value={leadData?.country}
-                    onChange={(e) => handleChange("country", e.target.value)}
+                    value={leadData?.city}
+                    onChange={(e) => handleChange("city", e.target.value)}
                     className="border-[1px] p-2 rounded-md w-full border-[#c1c1c1] cursor-pointer text-black">
                     <option value="">Select Country</option>
-                    {countries.map((country, key) => (
-                      <option key={key} value={country.name}>
-                        {country.name}
+                    {pakistanCities.map((city, key) => (
+                      <option key={key} value={city}>
+                        {city}
                       </option>
                     ))}
                   </CFormSelect>
                 </td>
               </tr>
               <tr>
-                <td className="pb-4 text-lg">Degree </td>
+                <td className="pb-4 text-lg">Project </td>
                 <td className="pb-4">
                   <CFormSelect
-                    value={leadData?.degree}
-                    onChange={(e) => handleChange("degree", e.target.value)}
+                    value={leadData?.property?.title}
+                    onChange={(e) => handleChange("property", e.target.value)}
                     className="border-[1px] p-2 rounded-md w-full border-[#c1c1c1] cursor-pointer text-black">
                     <option value="">Select Degree</option>
-                    {degrees.map((item, key) => (
-                      <option key={key} value={item.value}>
-                        {item.name}
-                      </option>
-                    ))}
-                  </CFormSelect>
-                </td>
-              </tr>
-              {leadData?.degree === "other" && (
-                <tr>
-                  <td className="pb-4 text-lg">Degree Name </td>
-                  <td className="pb-4">
-                    <TextField
-                      onChange={(e) => handleChange("degreeName", e.target.value)}
-                      value={leadData?.degreeName}
-                      name="degreeName"
-                      type="text"
-                      size="small"
-                      fullWidth
-                    />
-                  </td>
-                </tr>
-              )}
-              <tr>
-                <td className="pb-4 text-lg">Visa </td>
-                <td className="pb-4">
-                  <CFormSelect
-                    value={leadData?.visa}
-                    onChange={(e) => handleChange("visa", e.target.value)}
-                    className="border-[1px] p-2 rounded-md w-full border-[#c1c1c1] cursor-pointer text-black">
-                    <option value="">Select Visa</option>
-                    {Visa.map((item, key) => (
-                      <option key={key} value={item.value}>
-                        {item.name}
+                    {projects.map((item, key) => (
+                      <option key={item._id} value={item.title}>
+                        {item.title}
                       </option>
                     ))}
                   </CFormSelect>

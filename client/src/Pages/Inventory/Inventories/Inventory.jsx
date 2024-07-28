@@ -314,7 +314,6 @@ function Inventory() {
               columns={columns}
               rowsPerPage={10}
               isFetching={isFetching}
-              error={error}
             />
           </div>
       }

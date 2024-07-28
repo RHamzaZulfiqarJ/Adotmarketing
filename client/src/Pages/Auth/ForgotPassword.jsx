@@ -44,12 +44,12 @@ const ForgotPassword = () => {
 
   return (
     <div className="font-primary">
-      <div className="md:opacity-100 opacity-0 left-0 bottom-10 absolute h-[53%] w-[28%]">
+      <div className="md:opacity-100 opacity-0 left-0 bottom-10 fixed h-[53%] w-[28%]">
         <img src="/images/login-1.png" />
       </div>
       <div className="w-full h-screen ">
         <div className="flex justify-center pt-16">
-          <img className="h-12" src="/background/A-consultant-logo.png" />
+          <img className="h-24" src="/images/adotmarketinglogo.png" />
         </div>
         <div className="flex justify-center pt-6 pl-0 ml-0 rounded-lg">
           <div className="w-96 h-auto shadow-xl rounded bg-white">

@@ -26,16 +26,14 @@ const UpateStatusModal = ({ open, setOpen }) => {
   const dispatch = useDispatch();
   const { currentLead, isFetching } = useSelector((state) => state.lead);
   const statuses = [
-    { name: "Closed (Lost)", value: "closedLost" },
-    { name: "Followed Up (Call)", value: "followedUpCall" },
-    { name: "Contacted Client (Call Attempt)", value: "contactedCallAttempt" },
-    { name: "Contacted Client (Call)", value: "contactedCall" },
-    { name: "Followed Up (Email)", value: "followedUpEmail" },
-    { name: "Contacted Client (Email)", value: "contactedEmail" },
-    { name: "New", value: "new" },
-    { name: "Meeting (Done)", value: "meetingDone" },
+    { name: "New Client", value: "newClient" },
+    { name: "Follow Up", value: "followUp" },
+    { name: "Contacted Client", value: "contactedClient" },
+    { name: "Call Not Attend", value: "callNotAttend" },
+    { name: "Visit Schedule", value: "visitSchedule" },
+    { name: "Visit Done", value: "visitDone" },
     { name: "Closed (Won)", value: "closedWon" },
-    { name: "Meeting (Attempt)", value: "meetingAttempt" },
+    { name: "Closed (Lost)", value: "closedLost" },
   ];
   ////////////////////////////////////// STATES  /////////////////////////////////////
   const [status, setStatus] = useState(currentLead?.status);

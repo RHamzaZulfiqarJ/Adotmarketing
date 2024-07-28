@@ -36,12 +36,25 @@ export const getLeadByPhone = async (req, res, next) => {
     try {
         const { phone } = req.params;
         const findedUser = await User.findOne({ phone });
-        const findedLead = await Lead.find({ client: findedUser?._id })
-            .populate('client')
-            .populate('allocatedTo')
+
+        if (!findedUser) {
+            return res.status(404).json({ message: 'User not found', success: false });
+        }
+
+        const findedLead = await Lead.find({ client: findedUser._id })
+            .populate('allocatedTo', 'firstName lastName') // Populate allocatedTo with specific fields
+            .populate('property', 'title address') // Populate property with specific fields
+            .populate('client', 'name phone email') // Populate client with specific fields
+            .populate( 'followUps', 'status followUpDate remarks' )
             .exec();
 
-        res.status(200).json({ result: findedLead, message: 'Lead fetched successfully', success: true });
+        if (findedLead.length === 0) {
+            return res.status(404).json({ message: 'Lead not found', success: false });
+        }
+
+        const followUps = await FollowUp.find({ leadId: findedLead[0]._id });
+
+        res.status(200).json({ result: findedLead, followUps, message: 'Lead fetched successfully', success: true });
     } catch (err) {
         next(createError(500, err.message));
     }
@@ -80,17 +93,15 @@ const sources = [
     { name: "Referral", value: 'referral' },
 ];
 const statuses = [
-    { name: "New", value: 'new' },
-    { name: "Closed (Lost)", value: 'closedLost' },
-    { name: "Closed (Won)", value: 'closedWon' },
-    { name: "Meeting (Done)", value: 'meetingDone' },
-    { name: "Meeting (Attempt)", value: 'meetingAttempt' },
-    { name: "Followed Up (Call)", value: 'followedUpCall' },
-    { name: "Followed Up (Email)", value: 'followedUpEmail' },
-    { name: "Contacted Client (Call)", value: 'contactedClientCall' },
-    { name: "Contacted Client (Call Attempt)", value: 'contactedClientCallAttempt' },
-    { name: "Contacted Client (Email)", value: 'contactedClientEmail' },
-];
+    { name: "New Client", value: "newClient" },
+    { name: "Follow Up", value: "followUp" },
+    { name: "Contacted Client", value: "contactedClient" },
+    { name: "Call Not Attend", value: "callNotAttend" },
+    { name: "Visit Schedule", value: "visitSchedule" },
+    { name: "Visit Done", value: "visitDone" },
+    { name: "Closed (Won)", value: "closedWon" },
+    { name: "Closed (Lost)", value: "closedLost" },
+  ];
 
 export const getLeadsStat = async (req, res, next) => {
     const { type } = req.query;
@@ -277,7 +288,7 @@ export const filterLead = async (req, res, next) => {
 
 export const createLead = async (req, res, next) => {
     try {
-        const {city, priority, property, status, source, description, count, clientName, clientPhone} = req.body;
+        const { city, priority, property, status, source, description, count, clientName, clientPhone } = req.body;
         const { followUpStatus, followUpDate, remarks } = req.body  // for followup
 
         const foundLead = await User.findOne({ phone: clientPhone });
@@ -299,7 +310,7 @@ export const createLead = async (req, res, next) => {
                 allocatedTo: [req.user?._id],
             });
 
-            await FollowUp.create({ status: followUpStatus, followUpDate, remarks, leadId: newLead._id })
+            await FollowUp.create({ status: status, followUpDate, remarks: description, leadId: newLead._id })
 
 
             const populatedLead = await Lead.findById(newLead._id)

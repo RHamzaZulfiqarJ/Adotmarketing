@@ -74,7 +74,6 @@ const Upload = ({ image, isMultiple }) => {
         </>
     )
 
-
     if (isFetching)
         <div className="w-full flex justify-center items-center ">
             <Loader />

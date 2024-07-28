@@ -55,7 +55,7 @@ const TranscriptPage = ({ }) => {
   return (
     <div ref={pdfRef} className="completePdfPage w-full my-4 font-primary">
       <div className="flex justify-center">
-        <img className="h-16" src="/images/adotmarketinglogo.png" alt="" />
+        <img className="h-28" src="/images/adotmarketinglogo.png" alt="" />
       </div>
       <div className="my-10 flex justify-center">
         <table className="flex flex-col gap-4">
@@ -115,7 +115,7 @@ const TranscriptPage = ({ }) => {
 
       <div className="flex justify-center flex-col py-2">
           <p className="text-center">&copy; Right Reserverd by A. Marketing</p>
-          <p className="text-center">2nd Floor, Plaza 6-A, Vilas Road, Main Boulevard, Park View City, Lahore</p>
+          <p className="text-center">1st Floor Asian Business Center main entrance Bahria town phase7 Rawalpindi/Islamabad, Lahore, Pakistan</p>
       </div>
     </div>
   );

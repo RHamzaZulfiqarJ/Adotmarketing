@@ -1,6 +1,7 @@
 import mongoose from 'mongoose'
 import FollowUp from '../models/followUp.js'
 import { createError } from '../utils/error.js'
+import Lead from '../models/lead.js'
 
 export const getFollowUp = async (req, res, next) => {
     try {
@@ -38,7 +39,6 @@ export const getFollowUps = async (req, res, next) => {
     }
 }
 
-
 export const getEmployeeFollowUps = async (req, res, next) => {
     try {
         const { leadId } = req.params;
@@ -53,11 +53,6 @@ export const getEmployeeFollowUps = async (req, res, next) => {
         next(createError(500, err.message));
     }
 };
-
-
-
-
-
 
 export const getEmployeeFollowUpsStats = async (req, res, next) => {
     try {
@@ -166,10 +161,6 @@ export const getFollowUpsStats = async (req, res, next) => {
     }
 };
 
-
-
-
-
 export const createFollowUp = async (req, res, next) => {
     try {
 
@@ -178,7 +169,9 @@ export const createFollowUp = async (req, res, next) => {
             return next(createError(400, 'Make sure to provide all the fields'))
 
         const newFollowUp = await FollowUp.create(req.body)
-        res.status(200).json({ result: newFollowUp, message: 'followUp created successfully', success: true })
+        const UpdatedLeadStatus = await Lead.findByIdAndUpdate(newFollowUp.leadId, { status: status }, { new: true })
+
+        res.status(200).json({ result: newFollowUp && UpdatedLeadStatus, message: 'followUp created successfully', success: true })
 
     } catch (err) {
         next(createError(500, err.message))

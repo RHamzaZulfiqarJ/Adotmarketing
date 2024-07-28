@@ -72,6 +72,7 @@ const CreateVoucher = ({ open, setOpen, scroll, downloadPdf, loader }) => {
       clientName,
       phone,
       type,
+      cheque,
       total,
       degreeName,
       note,
@@ -108,14 +109,6 @@ const CreateVoucher = ({ open, setOpen, scroll, downloadPdf, loader }) => {
   };
 
   const today = new Date().toISOString().split("T")[0];
-
-  const degrees = [
-    { name: "Bachelors", value: "bachelors" },
-    { name: "MPhil", value: "mphil" },
-    { name: "PhD", value: "phd" },
-    { name: "Diploma", value: "diploma" },
-    { name: "Other", value: "other" },
-  ];
 
   const handleRemainingAmount = () => {
     const [number1, postfix1] = voucherData?.total.split(" ");
@@ -296,6 +289,21 @@ const CreateVoucher = ({ open, setOpen, scroll, downloadPdf, loader }) => {
                   </CFormSelect>
                 </td>
               </tr>
+              {voucherData.type === "cheque" && (
+                <tr>
+                  <td className="pb-4 text-lg">Cheque No. </td>
+                  <td className="pb-4">
+                    <TextField
+                      name="cheque"
+                      value={voucherData.cheque}
+                      onChange={(e) => handleChange("cheque", e.target.value)}
+                      size="small"
+                      type="text"
+                      fullWidth
+                    />
+                  </td>
+                </tr>
+              )}
               <tr>
                 <td className="pb-4 text-lg">Total Amount </td>
                 <td className="pb-4">

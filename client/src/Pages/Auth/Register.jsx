@@ -49,7 +49,7 @@ const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordButton, setShowPasswordButton] = useState(PasswordButtonInitialStyle);
   const [showSnackbar, setShowSnackbar] = useState(false);
-  const [selectedValue, setSelectedValue] = React.useState("");
+  const [selectedValue, setSelectedValue] = useState("");
 
   //////////////////////////////////////// USE EFFECTS ////////////////////////////////
 
@@ -127,12 +127,12 @@ const Signup = () => {
 
   return (
     <div className="font-primary w-full h-full bg-[#F6F9FA]">
-      <div className="md:opacity-100 opacity-0 left-0 bottom-[-4%] absolute h-[52%] w-[25%]">
-        <img src="/images/login-1.png" />
+      <div className="fixed bottom-0 left-0 h-[52%] w-[25%]">
+        <img src="/images/login-1.png" alt="Login Illustration" />
       </div>
       <div className="pb-10">
         <div className="flex justify-center pt-8">
-          <img className="h-12" src="/images/adotmarketinglogo.png" />
+          <img className="h-24" src="/images/adotmarketinglogo.png" alt="Adot Marketing Logo" />
         </div>
         <div className="flex justify-center pt-6 pl-0 ml-0 rounded-lg">
           <div className="w-96 h-auto shadow-xl rounded bg-white">
@@ -144,7 +144,8 @@ const Signup = () => {
             </p>
             <form
               onSubmit={handleSubmit}
-              className="flex flex-col gap-[12px] w-auto pl-[2rem] pt-[1rem] ">
+              className="flex flex-col gap-[12px] w-auto pl-[2rem] pt-[1rem] "
+            >
               <div className="flex flex-col gap-6">
                 {/* firstname */}
                 <Input
@@ -161,13 +162,15 @@ const Signup = () => {
                     <Alert
                       className="flex items-center justify-between"
                       severity="error"
-                      sx={{ width: "100%" }}>
+                      sx={{ width: "100%" }}
+                    >
                       {inputError.firstName}
                       <IconButton
                         onClick={handleCloseSnackbar}
                         aria-label="close"
                         color="inherit"
-                        sx={{ p: 0.5, ml: 10 }}>
+                        sx={{ p: 0.5, ml: 10 }}
+                      >
                         <PiX />
                       </IconButton>
                     </Alert>
@@ -188,13 +191,15 @@ const Signup = () => {
                     <Alert
                       className="flex items-center justify-between"
                       severity="error"
-                      sx={{ width: "100%" }}>
+                      sx={{ width: "100%" }}
+                    >
                       {inputError.lastName}
                       <IconButton
                         onClick={handleCloseSnackbar}
                         aria-label="close"
                         color="inherit"
-                        sx={{ p: 0.5, ml: 10 }}>
+                        sx={{ p: 0.5, ml: 10 }}
+                      >
                         <PiX />
                       </IconButton>
                     </Alert>
@@ -215,13 +220,15 @@ const Signup = () => {
                     <Alert
                       className="flex items-center justify-between"
                       severity="error"
-                      sx={{ width: "100%" }}>
+                      sx={{ width: "100%" }}
+                    >
                       {inputError.username}
                       <IconButton
                         onClick={handleCloseSnackbar}
                         aria-label="close"
                         color="inherit"
-                        sx={{ p: 0.5, ml: 10 }}>
+                        sx={{ p: 0.5, ml: 10 }}
+                      >
                         <PiX />
                       </IconButton>
                     </Alert>
@@ -257,13 +264,15 @@ const Signup = () => {
                     <Alert
                       className="flex items-center justify-between"
                       severity="error"
-                      sx={{ width: "100%" }}>
+                      sx={{ width: "100%" }}
+                    >
                       {inputError.phone}
                       <IconButton
                         onClick={handleCloseSnackbar}
                         aria-label="close"
                         color="inherit"
-                        sx={{ p: 0.5, ml: 10 }}>
+                        sx={{ p: 0.5, ml: 10 }}
+                      >
                         <PiX />
                       </IconButton>
                     </Alert>
@@ -284,13 +293,15 @@ const Signup = () => {
                     <Alert
                       className="flex items-center justify-between"
                       severity="error"
-                      sx={{ width: "100%" }}>
+                      sx={{ width: "100%" }}
+                    >
                       {inputError.email}
                       <IconButton
                         onClick={handleCloseSnackbar}
                         aria-label="close"
                         color="inherit"
-                        sx={{ p: 0.5, ml: 10 }}>
+                        sx={{ p: 0.5, ml: 10 }}
+                      >
                         <PiX />
                       </IconButton>
                     </Alert>
@@ -311,7 +322,8 @@ const Signup = () => {
                         <button
                           style={showPasswordButton}
                           onClick={handleToggleVisibility}
-                          className="absolute right-0">
+                          className="absolute right-0"
+                        >
                           {showPassword ? (
                             <PiEyeSlashThin className="text-[25px] m-2 text-black" />
                           ) : (
@@ -329,13 +341,15 @@ const Signup = () => {
                   <Alert
                     className="flex items-center justify-between"
                     severity="error"
-                    sx={{ width: "100%" }}>
+                    sx={{ width: "100%" }}
+                  >
                     {inputError.password}
                     <IconButton
                       onClick={handleCloseSnackbar}
                       aria-label="close"
                       color="inherit"
-                      sx={{ p: 0.5, ml: 10 }}>
+                      sx={{ p: 0.5, ml: 10 }}
+                    >
                       <PiX />
                     </IconButton>
                   </Alert>
@@ -345,9 +359,11 @@ const Signup = () => {
               <button
                 onClick={handleOpenSnackbar}
                 type="submit"
-                className={`w-[20rem]  hover:bg-[#45b8e2] mt-4 p-[6px] rounded-lg transition-all text-white font-medium tracking-wider ${isFetching ? "bg-[#17a2b8]  cursor-not-allowed" : "bg-[#20aee3]"
-                  }`}
-                variant="contained">
+                className={`w-[20rem]  hover:bg-[#45b8e2] mt-4 p-[6px] rounded-lg transition-all text-white font-medium tracking-wider ${
+                  isFetching ? "bg-[#17a2b8]  cursor-not-allowed" : "bg-[#20aee3]"
+                }`}
+                variant="contained"
+              >
                 {isFetching ? "Submitting..." : "Sign Up"}
               </button>
               {error && (
@@ -355,13 +371,15 @@ const Signup = () => {
                   <Alert
                     className="flex items-center justify-between"
                     severity="error"
-                    sx={{ width: "100%" }}>
+                    sx={{ width: "100%" }}
+                  >
                     {error}
                     <IconButton
                       onClick={handleCloseSnackbar}
                       aria-label="close"
                       color="inherit"
-                      sx={{ p: 0.5, ml: 10 }}>
+                      sx={{ p: 0.5, ml: 10 }}
+                    >
                       <PiX />
                     </IconButton>
                   </Alert>

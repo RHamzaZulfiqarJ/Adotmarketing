@@ -18,6 +18,7 @@ import {
 } from "@mui/material";
 import { PiNotepad, PiXLight } from "react-icons/pi";
 import { createFollowUp } from "../../../redux/action/followUp";
+import { CFormSelect } from "@coreui/react";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="down" ref={ref} {...props} />;
@@ -38,6 +39,17 @@ const CreateFollowUps = ({ setOpen, open, scroll }) => {
     followUpDate: "",
     leadId
   }
+
+  const statuses = [
+    { name: "New Client", value: "newClient" },
+    { name: "Follow Up", value: "followUp" },
+    { name: "Contacted Client", value: "contactedClient" },
+    { name: "Call Not Attend", value: "callNotAttend" },
+    { name: "Visit Schedule", value: "visitSchedule" },
+    { name: "Visit Done", value: "visitDone" },
+    { name: "Closed (Won)", value: "closedWon" },
+    { name: "Closed (Lost)", value: "closedLost" },
+  ];
 
   //////////////////////////////////////// STATES ////////////////////////////////////
   const [followUpData, setFollowUpData] = useState(initialFollowUpState);
@@ -98,27 +110,18 @@ const CreateFollowUps = ({ setOpen, open, scroll }) => {
               <tr>
                 <td className="pb-4 text-lg flex mt-1 items-start">Current Status </td>
                 <td className="pb-4">
-                  <Select
-                    onChange={handleInputChange}
-                    value={followUpData.status}
+                <CFormSelect
                     name="status"
-                    type="text"
-                    size="small"
-                    fullWidth>
-                    <MenuItem sx={{ fontFamily: "'Montserrat', sans-serif" }} value="New Lead">New Lead</MenuItem>
-                    <MenuItem sx={{ fontFamily: "'Montserrat', sans-serif" }} value="Call Not Answer">Call Not Answer</MenuItem>
-                    <MenuItem sx={{ fontFamily: "'Montserrat', sans-serif" }} value="Deal Done">Deal Done</MenuItem>
-                    <MenuItem sx={{ fontFamily: "'Montserrat', sans-serif" }} value="Keen Interested">Keen Interested</MenuItem>
-                    <MenuItem sx={{ fontFamily: "'Montserrat', sans-serif" }} value="Visit Done">Visit Done</MenuItem>
-                    <MenuItem sx={{ fontFamily: "'Montserrat', sans-serif" }} value="Contact in Future">Contact in Future</MenuItem>
-                    <MenuItem sx={{ fontFamily: "'Montserrat', sans-serif" }} value="Visit Schedule">Visit Schedule</MenuItem>
-                    <MenuItem sx={{ fontFamily: "'Montserrat', sans-serif" }} value="Archived">Archived</MenuItem>
-                    <MenuItem sx={{ fontFamily: "'Montserrat', sans-serif" }} value="Wrong Number">Wrong Number</MenuItem>
-                    <MenuItem sx={{ fontFamily: "'Montserrat', sans-serif" }} value="Busy">Busy</MenuItem>
-                    <MenuItem sx={{ fontFamily: "'Montserrat', sans-serif" }} value="Number Off">Number Off</MenuItem>
-                    <MenuItem sx={{ fontFamily: "'Montserrat', sans-serif" }} value="Call back Later">Call Back Later</MenuItem>
-                    <MenuItem sx={{ fontFamily: "'Montserrat', sans-serif" }} value="Interested">Interested</MenuItem>
-                  </Select>
+                    value={followUpData.status}
+                    onChange={handleInputChange}
+                    className="border-[1px] p-2 rounded-md w-full border-[#c1c1c1] cursor-pointer text-black">
+                    <option value="">Select an Option</option>
+                    {statuses.map((item, key) => (
+                      <option key={key} value={item.value}>
+                        {item.name}
+                      </option>
+                    ))}
+                  </CFormSelect>
                 </td>
               </tr>
               <tr>

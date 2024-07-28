@@ -38,6 +38,10 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 app.use('/uploads', express.static(join(__dirname, 'uploads')));
 
+app.get('/', (req, res) => {
+    res.send('Hello to API')
+})
+
 app.use('/api/v1', uploadRoutes)
 app.use('/api/v1/auth', authRoutes)
 app.use('/api/v1/user', userRoutes)

@@ -62,35 +62,50 @@ export const createVoucherApproval = async (req, res, next) => {
 }
 export const acceptVoucherApproval = async (req, res, next) => {
     try {
-
         const { approvalId } = req.params;
         const { password } = req.body;
         const { adminID } = req.query;
 
+        if (!approvalId || !password) {
+            return next(createError(400, 'Approval ID and password are required.'));
+        }
 
-        const approval = await Approval.findById(approvalId)
+        const approval = await Approval.findById(approvalId);
+        if (!approval) {
+            return next(createError(404, 'Approval not found.'));
+        }
 
-        const admin = await User.findById(req.user._id)
+        const admin = await User.findById('66803a151935363f991ac704');
+        if (!admin) {
+            return next(createError(404, 'Admin user not found.'));
+        }
+
         const inputPassword = password;
-        const savedPassword = admin?.password
-        const isPasswordCorrect = await bcrypt.compare(inputPassword, savedPassword)
+        const savedPassword = admin.password;
+        const isPasswordCorrect = await bcrypt.compare(inputPassword, savedPassword);
 
-        if (!isPasswordCorrect) return next(createError(401, 'Incorrect Password'))
+        if (!isPasswordCorrect) {
+            return next(createError(401, 'Incorrect Password'));
+        }
 
-        const voucher = await Voucher.findOne({ uid: approval.data.uid })
+        const voucher = await Voucher.findOne({ uid: approval.data.uid });
+        if (!voucher) {
+            return next(createError(404, 'Voucher not found.'));
+        }
 
-        await Approval.findByIdAndUpdate(approvalId, { $set: { status: 'accepted' } }, { new: true })
+        await Approval.findByIdAndUpdate(approvalId, { $set: { status: 'accepted' } }, { new: true });
         const result = await Voucher.findByIdAndUpdate(
             voucher._id,
             { $set: { status: 'accepted' } },
             { new: true }
         );
-        res.status(200).json({ result, message: '', success: true })
 
+        res.status(200).json({ result, message: 'Voucher accepted successfully', success: true });
     } catch (err) {
-        next(createError(500, err.message))
+        next(createError(500, err.message));
     }
-}
+};
+
 export const rejectVoucherApproval = async (req, res, next) => {
     try {
 

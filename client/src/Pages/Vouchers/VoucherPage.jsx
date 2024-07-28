@@ -47,7 +47,7 @@ const VoucherPage = ({ }) => {
 
         <div className="flex justify-between items w-full relative py-[1rem] ">
         <div className="flex justify-start">
-          <img src="/images/adotmarketinglogo.png" className="h-20 mb-5" />
+          <img src="/images/adotmarketinglogo.png" className="h-28 mb-5" />
         </div>
           <div className=" ">
             <table className="border-[1px] border-black w-full " >
@@ -93,7 +93,7 @@ const VoucherPage = ({ }) => {
               <th className="text-center border-y-[1px] border-x-[1px] border-black bg-[#dddddd] h-[2rem] w-[13rem] pb-4">Payment Date</th>
             </tr>
             <tr className='w-full' >
-              <td className="text-center border-b-[1px] border-x-[1px] border-black h-[2rem] w-[13rem] capitalize pb-4">{voucher?.type}</td>
+              <td className="text-center border-b-[1px] border-x-[1px] border-black h-[2rem] w-[13rem] capitalize pb-4">{voucher?.type} ({voucher?.cheque})</td>
               <td className="text-center border-b-[1px]  border-black h-[2rem] w-[13rem] pb-4">{voucher?.total}</td>
               <td className="text-center border-b-[1px] border-x-[1px] border-black h-[2rem] w-[13rem] pb-4">{voucher?.dueDate}</td>
             </tr>
@@ -137,8 +137,9 @@ const VoucherPage = ({ }) => {
         </div>
         
         <div className="flex justify-center flex-col py-2">
-          <p className="text-center">&copy; Right Reserverd by A. Marketing</p>
-          <p className="text-center">2nd Floor, Plaza 6-A, Vilas Road, Main Boulevard, Park View City, Lahore</p>
+          <p className="text-center">&copy; Right Reserverd by A. Marketing(SMC-PVT)LTD</p>
+          <p className="text-center">info@adotmarketing.co</p>
+          <p className="text-center">1st Floor Asian Business Center main entrance Bahria town phase7 Rawalpindi/Islamabad, Lahore, Pakistan</p>
         </div>
       </div>
 

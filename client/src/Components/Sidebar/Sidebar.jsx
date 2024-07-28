@@ -264,7 +264,7 @@ const Sidebar = ({ showSidebar, setShowSidebar }) => {
             {!showSidebar ? (
               ""
             ) : (
-              <img className="w-[100px]" src="/images/adotmarketinglogo.png" />
+              <img className="h-16" src="/images/adotmarketinglogo.png" />
             )}
           </div>
         </a>
@@ -291,7 +291,7 @@ const Sidebar = ({ showSidebar, setShowSidebar }) => {
         <Box className="absolute top-0 left-0 bg-white shadow-box w-[16rem] h-screen md:hidden flex z-[1100]">
           <div className="wrapper flex flex-col w-full h-full overflow-y-scroll p-[10px]">
             <div className="w-full flex justify-between items-center mb-[1rem] h-[4rem]">
-              <img className="h-[40px]" src="/background/A-consultant-logo.png" />
+              <img className="h-[40px]" src="/images/adotmarketinglogo.png" />
               <IconButton onClick={() => setShowSidebar(false)}>
                 <Close />
               </IconButton>
