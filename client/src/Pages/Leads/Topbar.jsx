@@ -8,18 +8,14 @@ import { getEmployeeLeads, getLeads, searchLead } from "../../redux/action/lead"
 import { PiArchive, PiChartBar, PiMagnifyingGlass, PiNote } from "react-icons/pi";
 import { FiFilter, FiList, FiUser } from "react-icons/fi";
 import CreateLead from "./CreateLead";
-import EditModal from "./EditModal";
-import { searchLeadReducer } from "../../redux/reducer/lead";
 
-const Topbar = ({ options, setOptions, isFiltered, setIsFiltered, openFilters, setOpenFilters }) => {
+const Topbar = ({ options, setOptions, isFiltered, setIsFiltered, openFilters, setOpenFilters, search, setSearch }) => {
   ////////////////////////////////////////// VARIABLES //////////////////////////////////////
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const { leads } = useSelector(state => state.lead);
   const title = pathname.split("/")[1];
   const pathArr = pathname.split("/").filter((item) => item != "");
   const showOptionButtons = !pathArr.includes("create");
-  const dispatch = useDispatch();
 
   ////////////////////////////////////////// STATES //////////////////////////////////////
   const [open, setOpen] = useState(false);
@@ -36,12 +32,11 @@ const Topbar = ({ options, setOptions, isFiltered, setIsFiltered, openFilters, s
     }
   }, [open]);
 
-
   ////////////////////////////////////////// FUNCTIONS //////////////////////////////////////
-  const handleSearch = (searchTerm) => {
-    dispatch(searchLeadReducer(searchTerm));
-  }
 
+  const handleInput = (e) => {
+    setSearch(e.target.value);
+  };
 
   const handleToggleShowArchivedLeads = () => {
     setOptions((pre) => ({
@@ -57,9 +52,11 @@ const Topbar = ({ options, setOptions, isFiltered, setIsFiltered, openFilters, s
       showArchivedLeads: false,
     }));
   };
+
   const handleToggleIsKanbanView = () => {
     setOptions((pre) => ({ ...pre, isKanbanView: !options?.isKanbanView }));
   };
+  
   const handleToggleFilters = () => {
     setOpenFilters((pre) => !pre);
   };
@@ -68,10 +65,6 @@ const Topbar = ({ options, setOptions, isFiltered, setIsFiltered, openFilters, s
     setOpen(true);
     setScroll(scrollType);
   };
-
-  const handleOpenFollowUps = () => {
-    navigate('/leads/followups/all')
-  }
 
   return (
     <div className="flex flex-col tracking-wide pb-8 font-primary">
@@ -96,8 +89,9 @@ const Topbar = ({ options, setOptions, isFiltered, setIsFiltered, openFilters, s
               <FormControl>
                 <Input
                   name="search"
+                  value={search}
                   placeholder="Search Leads"
-                  onChange={(e) => handleSearch(e.target.value)}
+                  onChange={handleInput}
                   startAdornment={
                     <InputAdornment position="start">
                       <PiMagnifyingGlass className="text-[25px]" />

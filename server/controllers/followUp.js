@@ -46,7 +46,7 @@ export const getEmployeeFollowUps = async (req, res, next) => {
         // Find all follow-ups related to the given leadId
         const allFollowUps = await FollowUp.find({ leadId }).populate('leadId');
 
-        const employeeFollowUps = allFollowUps.filter((followUp) => followUp.leadId?.allocatedTo?.findIndex(allocatedTo => allocatedTo.toString() == req.user._id.toString()) != -1)
+        const employeeFollowUps = allFollowUps.filter((followUp) => followUp.leadId?.allocatedTo?.findIndex(allocatedTo => allocatedTo.toString() == req.user?._id.toString()) != -1)
 
         res.status(200).json({ result: employeeFollowUps, message: 'FollowUps retrieved successfully', success: true });
     } catch (err) {
@@ -56,80 +56,59 @@ export const getEmployeeFollowUps = async (req, res, next) => {
 
 export const getEmployeeFollowUpsStats = async (req, res, next) => {
     try {
-        const response = await FollowUp.aggregate([
-            {
-                $sort: { createdAt: 1 },
-            },
-            {
-                $group: {
-                    _id: {
-                        $dateToString: { format: '%Y-%m-%d', date: '$followUpDate' },
-                    },
-                    followUps: { $push: '$$ROOT' },
-                },
-            },
-            {
-                $project: {
-                    _id: 0,
-                    date: '$_id',
-                    followUps: 1,
-                },
-            },
-            {
-                $unwind: '$followUps'
-            },
-            {
-                $lookup: {
-                    from: 'leads',
-                    localField: 'followUps.leadId',
-                    foreignField: '_id',
-                    as: 'followUps.lead'
-                }
-            },
-            {
-                $unwind: '$followUps.lead'
-            },
-            {
-                $match: {
-                    'followUps.lead.allocatedTo': req.user._id
-                }
-            },
-            {
-                $lookup: {
-                    from: 'users',
-                    localField: 'followUps.lead.client',
-                    foreignField: '_id',
-                    as: 'followUps.lead.client'
-                }
-            },
-            {
-                $lookup: {
-                    from: 'projects',
-                    localField: 'followUps.lead.property',
-                    foreignField: '_id',
-                    as: 'followUps.lead.property',
-                },
-            },
-            {
-                $group: {
-                    _id: '$date',
-                    followUps: { $push: '$followUps' }
-                }
-            },
-        ]);
+        const allFollowUps = await FollowUp.find()
+            .populate({
+                path: 'leadId',
+                match: { isArchived: false },  // Only include leads that are not archived
+                populate: [
+                    { path: 'client' },
+                    { path: 'property' },
+                    { path: 'allocatedTo' }
+                ]
+            })
+            .exec();
 
-        res.status(200).json({ result: response, message: 'stats fetched successfully.', success: true });
-    } catch (error) {
-        next(createError(500, error.message))
+        const filteredFollowUps = allFollowUps.filter(followUp =>
+            followUp.leadId?.allocatedTo.some(emp => emp._id.toString() === req.user?._id.toString())
+        );
+
+        const latestFollowUpsByLead = filteredFollowUps.reduce((result, followUp) => {
+            const leadId = followUp.leadId?._id.toString();
+            
+            if (!result[leadId] || new Date(followUp.followUpDate) > new Date(result[leadId].followUpDate)) {
+                result[leadId] = followUp;
+            }
+            
+            return result;
+        }, {});
+
+        const latestFollowUpsArray = Object.values(latestFollowUpsByLead);
+
+        const groupedByDate = latestFollowUpsArray.reduce((result, followUp) => {
+            const followUpDate = new Date(followUp.followUpDate).toLocaleDateString();
+
+            let existingDateGroup = result.find(item => item.date === followUpDate);
+            if (!existingDateGroup) {
+                existingDateGroup = { date: followUpDate, followUps: [] };
+                result.push(existingDateGroup);
+            }
+
+            existingDateGroup.followUps.push(followUp);
+            return result;
+        }, []);
+
+        res.status(200).json({ result: groupedByDate, message: "Stats fetched successfully.", success: true });
+    } catch (err) {
+        next(createError(500, err.message));
     }
 };
 
 export const getFollowUpsStats = async (req, res, next) => {
     try {
-
         const followUps = await FollowUp.find()
             .populate({
                 path: 'leadId',
+                match: { isArchived: false },  // Only include leads that are not archived
                 populate: [
                     { path: 'client' },
                     { path: 'property' },
@@ -137,29 +116,39 @@ export const getFollowUpsStats = async (req, res, next) => {
                 ],
             }).exec();
 
-            console.log(followUps)
+        // Remove follow-ups with null leadId (filtered out because of isArchived: false)
+        const validFollowUps = followUps.filter(followUp => followUp.leadId !== null);
 
-        const reducedFollowUps = followUps.reduce((result, followUp) => {
+        const latestFollowUpsByLead = validFollowUps.reduce((result, followUp) => {
+            const leadId = followUp.leadId?._id.toString();
+            
+            if (!result[leadId] || new Date(followUp.followUpDate) > new Date(result[leadId].followUpDate)) {
+                result[leadId] = followUp;
+            }
+            
+            return result;
+        }, {});
+
+        const latestFollowUpsArray = Object.values(latestFollowUpsByLead);
+
+        const groupedByDate = latestFollowUpsArray.reduce((result, followUp) => {
             const followUpDate = new Date(followUp.followUpDate).toLocaleDateString();
 
-            if (!result.find(item => item.date === followUpDate)) {
-                result.push({ date: followUpDate, followUps: [] });
+            let existingDateGroup = result.find(item => item.date === followUpDate);
+            if (!existingDateGroup) {
+                existingDateGroup = { date: followUpDate, followUps: [] };
+                result.push(existingDateGroup);
             }
- 
-            result.forEach(item => {
-                if (item.date === followUpDate) {
-                    item.followUps.push(followUp);
-                }
-            });
 
+            existingDateGroup.followUps.push(followUp);
             return result;
         }, []);
 
-        res.status(200).json({ result: reducedFollowUps, message: "Stats fetched successfully.", success: true });
+        res.status(200).json({ result: groupedByDate, message: "Stats fetched successfully.", success: true });
     } catch (error) {
         next(createError(500, error.message));
     }
-};
+}
 
 export const createFollowUp = async (req, res, next) => {
     try {

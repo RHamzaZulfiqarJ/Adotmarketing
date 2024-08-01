@@ -31,6 +31,7 @@ const CreateTranscript = ({ open, setOpen, scroll }) => {
     designation: "",
     phone: "",
     salaryMonth: "",
+    salaryType: "",
     totalSalary: "",
     lateArrivals: "",
     halfDays: "",
@@ -53,6 +54,8 @@ const CreateTranscript = ({ open, setOpen, scroll }) => {
     "November",
     "December",
   ];
+
+  const salaryTypes = ["Standard", "Commission"];
   ////////////////////////////////////////// STATES /////////////////////////////////////
   const [transcriptData, setTranscriptData] = useState(initialState);
 
@@ -91,8 +94,8 @@ const CreateTranscript = ({ open, setOpen, scroll }) => {
         TransitionComponent={Transition}
         keepMounted
         onClose={handleClose}
-        fullWidth="sm"
-        maxWidth="sm"
+        fullWidth="md"
+        maxWidth="md"
         aria-describedby="alert-dialog-slide-description">
         <DialogTitle className="flex items-center justify-between">
           <div className="text-sky-400 font-primary">Add New Salary Slip</div>
@@ -157,6 +160,22 @@ const CreateTranscript = ({ open, setOpen, scroll }) => {
                     className="border-[1px] p-2 rounded-md w-full border-[#c1c1c1] cursor-pointer text-black">
                     <option value={""}>Select an Option</option>
                     {months.map((employee, key) => (
+                      <option key={key} value={employee}>
+                        {employee}
+                      </option>
+                    ))}
+                  </CFormSelect>
+                </td>
+              </tr>
+              <tr>
+                <td className="pb-4 text-lg">Salary Type </td>
+                <td className="pb-4">
+                  <CFormSelect
+                    value={transcriptData.salaryType}
+                    onChange={(e) => handleChange("salaryType", e.target.value)}
+                    className="border-[1px] p-2 rounded-md w-full border-[#c1c1c1] cursor-pointer text-black">
+                    <option value={""}>Select an Option</option>
+                    {salaryTypes.map((employee, key) => (
                       <option key={key} value={employee}>
                         {employee}
                       </option>

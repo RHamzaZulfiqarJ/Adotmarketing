@@ -22,7 +22,8 @@ const Lead = () => {
   const { leadId } = useParams();
   const dispatch = useDispatch();
   const { currentLead, isFetching } = useSelector((state) => state.lead);
-  const date = moment(currentLead?.createdAt).format("DD-MM-YYYY");
+  const createdDate = moment(currentLead?.createdAt).format("DD-MM-YYYY");
+  const updatedDate = moment(currentLead?.updatedAt).format("DD-MM-YYYY");
 
   //////////////////////////////////// UseEffects /////////////////////////////////////
   useEffect(() => {
@@ -79,34 +80,34 @@ const Lead = () => {
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
                   <TableHead>
                     <TableRow>
-                      <TableCell sx={{ fontFamily: "'Montserrat', sans-serif", color: 'rgb(32 174 227)', fontSize: '16px' }}>Client Name</TableCell>
-                      <TableCell sx={{ fontFamily: "'Montserrat', sans-serif", color: 'rgb(32 174 227)', fontSize: '16px' }}>Client Phone</TableCell>
-                      <TableCell sx={{ fontFamily: "'Montserrat', sans-serif", color: 'rgb(32 174 227)', fontSize: '16px' }}>Property</TableCell>
-                      <TableCell sx={{ fontFamily: "'Montserrat', sans-serif", color: 'rgb(32 174 227)', fontSize: '16px' }}>City</TableCell>
-                      <TableCell sx={{ fontFamily: "'Montserrat', sans-serif", color: 'rgb(32 174 227)', fontSize: '16px' }}>Created</TableCell>
                       <TableCell sx={{ fontFamily: "'Montserrat', sans-serif", color: 'rgb(32 174 227)', fontSize: '16px' }}>Allocated To</TableCell>
+                      <TableCell sx={{ fontFamily: "'Montserrat', sans-serif", color: 'rgb(32 174 227)', fontSize: '16px' }}>Property</TableCell>
+                      <TableCell sx={{ fontFamily: "'Montserrat', sans-serif", color: 'rgb(32 174 227)', fontSize: '16px' }}>Area</TableCell>
+                      <TableCell sx={{ fontFamily: "'Montserrat', sans-serif", color: 'rgb(32 174 227)', fontSize: '16px' }}>Source</TableCell>
+                      <TableCell sx={{ fontFamily: "'Montserrat', sans-serif", color: 'rgb(32 174 227)', fontSize: '16px' }}>Created</TableCell>
+                      <TableCell sx={{ fontFamily: "'Montserrat', sans-serif", color: 'rgb(32 174 227)', fontSize: '16px' }}>Updated</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-                      <TableCell sx={{ fontFamily: "'Montserrat', sans-serif" }}><Tooltip title={currentLead?.clientName} arrow>{currentLead?.clientName}</Tooltip></TableCell>
-                      <TableCell sx={{ fontFamily: "'Montserrat', sans-serif" }}><Tooltip title={currentLead?.clientPhone} arrow>{currentLead?.clientPhone}</Tooltip></TableCell>
-                      <TableCell sx={{ fontFamily: "'Montserrat', sans-serif" }}><Tooltip title={currentLead?.property?.title} arrow>{currentLead?.property?.title}</Tooltip></TableCell>
-                      <TableCell sx={{ fontFamily: "'Montserrat', sans-serif" }}><Tooltip className="capitalize" title={currentLead?.city} arrow>{currentLead?.city}</Tooltip></TableCell>
-                      <TableCell sx={{ fontFamily: "'Montserrat', sans-serif" }}><Tooltip title={date} arrow>{date}</Tooltip></TableCell>
                       <TableCell sx={{ fontFamily: "'Montserrat', sans-serif" }}>
-                      {
-                        currentLead?.allocatedTo?.length > 1 ? (
-                          currentLead?.allocatedTo?.map((item, key) => (
-                            <Tooltip className="capitalize flex gap-2" key={key} title={`• ${console.log(item?.firstName)}`} arrow>• {item?.firstName}</Tooltip>
-                          ))
-                        ) : (
-                          currentLead?.allocatedTo?.map((item, key) => (
-                            <Tooltip className="capitalize flex gap-2" key={key} title={item?.firstName} arrow>{item?.firstName}</Tooltip>
-                          ))
-                        )
-                      }
-                    </TableCell>
+                        {
+                          currentLead?.allocatedTo?.length > 1 ? (
+                            currentLead?.allocatedTo?.map((item, key) => (
+                              <Tooltip className="capitalize flex gap-2" key={key} title={`• ${console.log(item?.firstName)}`} arrow>• {item?.firstName}</Tooltip>
+                            ))
+                          ) : (
+                            currentLead?.allocatedTo?.map((item, key) => (
+                              <Tooltip className="capitalize flex gap-2" key={key} title={item?.firstName} arrow>{item?.firstName}</Tooltip>
+                            ))
+                          )
+                        }
+                      </TableCell>
+                      <TableCell sx={{ fontFamily: "'Montserrat', sans-serif" }}><Tooltip title={currentLead?.property?.title} arrow>{currentLead?.property?.title}</Tooltip></TableCell>
+                      <TableCell sx={{ fontFamily: "'Montserrat', sans-serif" }}><Tooltip title={`${ currentLead?.area ? `${currentLead?.area} Marla` : " " }`} arrow>{`${ currentLead?.area ? `${currentLead?.area} Marla` : " " }`}</Tooltip></TableCell>
+                      <TableCell sx={{ fontFamily: "'Montserrat', sans-serif" }}><Tooltip title={currentLead?.source} arrow>{currentLead?.source}</Tooltip></TableCell>
+                      <TableCell sx={{ fontFamily: "'Montserrat', sans-serif" }}><Tooltip title={createdDate} arrow>{createdDate}</Tooltip></TableCell>
+                      <TableCell sx={{ fontFamily: "'Montserrat', sans-serif" }}><Tooltip title={updatedDate} arrow>{updatedDate}</Tooltip></TableCell>
                     </TableRow>
                   </TableBody>
                 </Table>

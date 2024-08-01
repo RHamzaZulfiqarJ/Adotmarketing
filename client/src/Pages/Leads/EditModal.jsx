@@ -68,15 +68,13 @@ const EditModal = ({ open, setOpen, scroll, leadId }) => {
   let initialLeadState = {
     clientName: "",
     clientPhone: "",
+    city: "",
+    description: "",
+    property: "",
+    area: "",
     priority: "",
-    country: "",
-    degree: "",
-    major: "",
-    degreeName: "",
-    visa: "",
     status: "",
     source: "",
-    description: "",
   };
   ////////////////////////////////////// STATES  //////////////////////////////////////////
   const [leadData, setLeadData] = useState({
@@ -112,6 +110,7 @@ const EditModal = ({ open, setOpen, scroll, leadId }) => {
       priority,
       status,
       degree,
+      area,
       major,
       visa,
       source,
@@ -164,9 +163,8 @@ const EditModal = ({ open, setOpen, scroll, leadId }) => {
                 <td className="pb-4">
                   <TextField
                     value={
-                      leadData?.clientName || leadData?.client?.firstName
+                      leadData?.clientName
                     }
-                    disabled
                     name={"clientName"}
                     onChange={(e) => handleChange("clientName", e.target.value)}
                     size="small"
@@ -178,10 +176,9 @@ const EditModal = ({ open, setOpen, scroll, leadId }) => {
                 <td className="pb-4 text-lg">Phone </td>
                 <td className="pb-4">
                   <TextField
-                    disabled
                     name="clientPhone"
                     onChange={(e) => handleChange("clientPhone", e.target.value)}
-                    value={leadData?.clientPhone || leadData?.client?.phone}
+                    value={leadData?.clientPhone}
                     type="number"
                     size="small"
                     fullWidth
@@ -228,6 +225,19 @@ const EditModal = ({ open, setOpen, scroll, leadId }) => {
                       </option>
                     ))}
                   </CFormSelect>
+                </td>
+              </tr>
+              <tr>
+                <td className="pb-4 text-lg">Area in Marla </td>
+                <td className="pb-4">
+                  <TextField
+                    name="area"
+                    onChange={(e) => handleChange("area", e.target.value)}
+                    value={leadData.area}
+                    type="number"
+                    size="small"
+                    fullWidth
+                  />
                 </td>
               </tr>
               <tr>

@@ -7,10 +7,10 @@ const router = express.Router()
 
 // GET
 router.get('/get/single/:followUpId', verifyToken, verifyEmployee, getFollowUp)
-router.get('/get/all/:leadId', verifyToken, verifyEmployee, getFollowUps)
+router.get('/get/all/:leadId', verifyToken, getFollowUps)
 router.get('/get/employee/:leadId', verifyToken, verifyEmployee, getEmployeeFollowUps)
-router.get('/get/stats', getFollowUpsStats)
-router.get('/get/stats/employee', getEmployeeFollowUpsStats)
+router.get('/get/stats', getFollowUpsStats, verifyToken)
+router.get('/get/stats/employee', verifyToken, verifyEmployee, getEmployeeFollowUpsStats)
 
 // POST
 router.post('/create', verifyToken, verifyEmployee, createFollowUp)

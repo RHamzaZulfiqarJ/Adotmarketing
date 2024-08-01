@@ -3,8 +3,6 @@ import User from '../models/user.js';
 import FollowUp from '../models/followUp.js';
 import Project from '../models/project.js';
 import { createError, isValidDate } from '../utils/error.js';
-import projectModel from '../models/project.js';
-import userModel from '../models/user.js';
 
 export const getLead = async (req, res, next) => {
     try {
@@ -288,7 +286,7 @@ export const filterLead = async (req, res, next) => {
 
 export const createLead = async (req, res, next) => {
     try {
-        const { city, priority, property, status, source, description, count, clientName, clientPhone } = req.body;
+        const { city, priority, area, property, status, source, description, count, clientName, clientPhone } = req.body;
         const { followUpStatus, followUpDate, remarks } = req.body  // for followup
 
         const foundLead = await User.findOne({ phone: clientPhone });
@@ -304,6 +302,7 @@ export const createLead = async (req, res, next) => {
                 clientPhone,
                 priority,
                 property,
+                area,
                 status,
                 source,
                 description,
@@ -336,7 +335,7 @@ export const updateLead = async (req, res, next) => {
     try {
         const { leadId } = req.params;
         const {
-            firstName, lastName, username, phone, CNIC, clientCity,
+            firstName, lastName, area, username, phone, CNIC, clientCity,
             city, priority, property, status, source, description,
         } = req.body;
 
@@ -349,7 +348,7 @@ export const updateLead = async (req, res, next) => {
 
         const updatedLead = await Lead.findByIdAndUpdate(
             leadId,
-            { city, priority, property, status, source, description, ...req.body },
+            { city, priority, property, area, status, source, description, ...req.body },
             { new: true },
         )
             .populate('property')
@@ -430,8 +429,13 @@ export const deleteLead = async (req, res, next) => {
 
         if (!foundLead) return next(createError(400, 'Lead not exist'));
 
+        // Delete all follow-ups associated with the lead
+        await FollowUp.deleteMany({ leadId });
+
+        // Delete the lead itself
         const deletedLead = await Lead.findByIdAndDelete(leadId);
-        res.status(200).json({ result: deletedLead, message: 'Lead deleted successfully', success: true });
+
+        res.status(200).json({ result: deletedLead, message: 'Lead and associated follow-ups deleted successfully', success: true });
     } catch (err) {
         next(createError(500, err.message));
     }

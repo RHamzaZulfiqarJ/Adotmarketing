@@ -106,6 +106,7 @@ function Leads({ type, showSidebar }) {
   const unarchivedLeads = leads.filter((lead) => !lead.isArchived);
   const { loggedUser } = useSelector((state) => state.user);
   const role = loggedUser.role;
+  
   const columns = [
     {
       field: "uid",
@@ -320,6 +321,7 @@ function Leads({ type, showSidebar }) {
   }
 
   ////////////////////////////////////// STATES //////////////////////////////
+  const [search, setSearch] = useState("");
   const [openAttachmentModal, setOpenAttachmentModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
   const [openViewModal, setOpenViewModal] = useState(false);
@@ -410,6 +412,8 @@ function Leads({ type, showSidebar }) {
         setOpenFilters={setOpenFilters}
         setIsFiltered={setIsFiltered}
         isFiltered={isFiltered}
+        search={search}
+        setSearch={setSearch}
       />
       {options.isKanbanView ? (
         <Kanban options={options} setOptions={setOptions} />

@@ -150,39 +150,31 @@ const AllFollowUpsTable = () => {
       headerClassName: "super-app-theme--header",
       width: 150,
       renderCell: (params) => (
-        <Tooltip title={params.row.status ? params.row.status : params.row?.leadId?.status} arrow placement="bottom">
-          <div
-            className={`font-primary font-light border-[1px] rounded-full py-1 px-2 ${
-              params.row?.status == "New Lead"
-                ? "text-red-400 border-red-400"
-                : params.row?.status == "Call Not Answer"
-                ? "text-yellow-400 border-yellow-400"
-                : params.row?.status == "Deal Done"
-                ? "text-green-400 border-green-400"
-                : params.row?.status == "Keen Interested"
-                ? "text-blue-400 border-blue-400"
-                : params.row?.status == "Visit Done"
-                ? "text-purple-400 border-purple-400"
-                : params.row?.status == "Contact in Future"
-                ? "text-cyan-400 border-cyan-400"
-                : params.row?.status == "Visit Schedule"
-                ? "text-pink-400 border-pink-400"
-                : params.row?.status == "Archived"
-                ? "text-rose-700 border-rose-700"
-                : params.row?.status == "Wrong Number"
-                ? "text-amber-700 border-amber-700"
-                : params.row?.status == "Busy"
-                ? "text-emerald-700 border-emerald-700"
-                : params.row?.status == "Number Off"
-                ? "text-info border-info"
-                : params.row?.status == "Call back Later"
-                ? "text-yellow-600 border-yellow-600"
-                : params.row?.status == "Interested"
-                ? "text-success border-success"
-                : "text-red-400 border-red-400"
-            }`}>
-            {params.row.status ? params.row.status : params.row?.leadId?.status}
-          </div>
+        <Tooltip
+          title={params.row.status ? params.row.status : params.row?.leadId?.status}
+          arrow
+          placement="bottom">
+          <span
+            className={`border-[1px] px-[8px] py-[4px] rounded-full capitalize font-primary font-medium 
+          ${params.row?.status == "closedWon" ? "border-green-500 text-green-500" : ""} 
+          ${params.row?.status == "closedLost" ? "border-red-400 text-red-400" : ""} 
+          ${params.row?.status == "followUp" ? "border-sky-400 text-sky-400" : ""}
+          ${params.row?.status == "contactedClient" ? "border-orange-400 text-orange-400" : ""} 
+          ${params.row?.status == "callNotAttend" ? "border-lime-400 text-lime-500" : ""} 
+          ${params.row?.status == "visitSchedule" ? "border-teal-400 text-teal-500" : ""} 
+          ${params.row?.status == "visitDone" ? "border-indigo-400 text-indigo-500" : ""}
+          ${params.row?.status == "newClient" ? "border-rose-700 text-rose-700" : ""}`}>
+            <span>
+              {params.row?.status == "closedWon" ? <div>Closed Won</div> : <div></div>}
+              {params.row?.status == "closedLost" ? <div>Closed Lost</div> : <div></div>}
+              {params.row?.status == "followUp" ? <div>Follow Up</div> : <div></div>}
+              {params.row?.status == "ContactedClient" ? <div>Contacted Client</div> : <div></div>}
+              {params.row?.status == "callNotAttend" ? <div>Call Not Attend</div> : <div></div>}
+              {params.row?.status == "visitSchedule" ? <div>Visit Schedule</div> : <div></div>}
+              {params.row?.status == "visitDone" ? <div>Visit Done</div> : <div></div>}
+              {params.row?.status == "newClient" ? <div>New Client</div> : <div></div>}
+            </span>
+          </span>
         </Tooltip>
       ),
     },

@@ -44,6 +44,7 @@ const leadSlice = createSlice({
             });
             state.leads = searchedLeads;
         },
+
         filterLeadReducer: (state, action) => {
             const { allLeads } = state;
             const { payload: filters } = action;
@@ -53,7 +54,8 @@ const leadSlice = createSlice({
                 if (filters.priority && lead.priority.toLowerCase() != filters.priority.toLowerCase()) return false;
                 if (filters.status && lead.status.toLowerCase() != filters.status.toLowerCase()) return false;
                 if (filters.source && lead.source.toLowerCase() != filters.source.toLowerCase()) return false;
-                if (filters.property && lead.property._id.toString() != filters.property.toString()) return false;
+                if (filters.property && lead.property._id.toString() !== filters.property.toString()) return false;
+                if (filters.allocatedTo && (!lead.allocatedTo || !lead.allocatedTo.some(a => a._id && a._id.toString() === filters.allocatedTo.toString()))) return false;
                 if (filters.startingDate && new Date(lead.createdAt) < new Date(filters.startingDate)) return false;
                 if (filters.endingDate && new Date(lead.createdAt) > new Date(filters.endingDate)) return false;
                 return true;
@@ -61,8 +63,6 @@ const leadSlice = createSlice({
 
             state.leads = filteredLeads;
         },
-
-
 
         deleteLeadReducer: (state, action) => { state.leads = state.leads.filter(l => l._id != action.payload._id) },
     }

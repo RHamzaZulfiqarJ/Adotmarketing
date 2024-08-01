@@ -41,6 +41,7 @@ const CreateLead = ({ setOpen, open, scroll }) => {
     city: "",
     description: "",
     property: "",
+    area: "",
     priority: "",
     status: "",
     source: "",
@@ -97,6 +98,7 @@ const CreateLead = ({ setOpen, open, scroll }) => {
       clientPhone,
       city,
       priority,
+      area,
       status,
       source,
       property,
@@ -213,6 +215,19 @@ const CreateLead = ({ setOpen, open, scroll }) => {
                       </option>
                     ))}
                   </CFormSelect>
+                </td>
+              </tr>
+              <tr>
+                <td className="pb-4 text-lg">Area in Marla </td>
+                <td className="pb-4">
+                  <TextField
+                    name="area"
+                    onChange={(e) => handleChange("area", e.target.value)}
+                    value={leadData.area}
+                    type="number"
+                    size="small"
+                    fullWidth
+                  />
                 </td>
               </tr>
               <tr>

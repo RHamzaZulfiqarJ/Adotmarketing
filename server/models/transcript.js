@@ -22,6 +22,10 @@ const transcriptSchema = Schema({
         type: Number,
         required: false
     },
+    salaryType: {
+        type: String,
+        required: false
+    },
     lateArrivals: {
         type: Number,
         required: false

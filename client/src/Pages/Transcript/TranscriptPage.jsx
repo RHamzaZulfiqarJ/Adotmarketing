@@ -71,6 +71,12 @@ const TranscriptPage = ({ }) => {
             <th className="px-10 text-lg">Designation :</th>
             <td className="px-10 text-lg">{currentTranscript?.designation}</td>
           </tr>
+          <tr>
+            <th className="px-10 text-lg">Salary Type :</th>
+            <td className="w-[18rem] text-lg">{currentTranscript?.salaryType}</td>
+            <th className="px-10 text-lg">Phone Number :</th>
+            <td className="px-10 text-lg">{currentTranscript?.phone}</td>
+          </tr>
         </table>
       </div>
       <div className="my-14 flex justify-center">
@@ -114,8 +120,9 @@ const TranscriptPage = ({ }) => {
       </div>
 
       <div className="flex justify-center flex-col py-2">
-          <p className="text-center">&copy; Right Reserverd by A. Marketing</p>
-          <p className="text-center">1st Floor Asian Business Center main entrance Bahria town phase7 Rawalpindi/Islamabad, Lahore, Pakistan</p>
+        <p className="text-center">&copy; Right Reserverd by A. Marketing(SMC-PVT)LTD</p>
+        <p className="text-center">info@adotmarketing.co</p>
+        <p className="text-center">1st Floor Asian Business Center main entrance Bahria town phase7 Rawalpindi/Islamabad, Lahore, Pakistan</p>
       </div>
     </div>
   );

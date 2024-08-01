@@ -75,7 +75,7 @@ export const acceptVoucherApproval = async (req, res, next) => {
             return next(createError(404, 'Approval not found.'));
         }
 
-        const admin = await User.findById('66803a151935363f991ac704');
+        const admin = await User.findById('65412fb65008910ded42b145');
         if (!admin) {
             return next(createError(404, 'Admin user not found.'));
         }
