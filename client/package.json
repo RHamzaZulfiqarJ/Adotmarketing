@@ -29,6 +29,7 @@
     "axios": "^1.4.0",
     "bootstrap-icons": "^1.10.5",
     "clsx": "^2.0.0",
+    "daisyui": "^4.12.10",
     "date-fns": "^2.30.0",
     "dayjs": "^1.11.9",
     "email-validator": "^2.0.4",
@@ -60,7 +61,8 @@
     "stream-chat": "^8.10.1",
     "styled-components": "^6.0.7",
     "swiper": "^10.1.0",
-    "timeago.js": "^4.0.2"
+    "timeago.js": "^4.0.2",
+    "use-debounce": "^10.0.2"
   },
   "devDependencies": {
     "@types/react": "^18.2.14",

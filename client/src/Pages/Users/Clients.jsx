@@ -160,6 +160,7 @@ const Clients = () => {
   const [selectedUserId, setSelectedUserId] = useState("");
   const [openFilters, setOpenFilters] = useState("");
   const [openUser, setOpenUser] = useState(false);
+  const [search, setSearch] = useState("")
 
   ////////////////////////////////////// USE EFFECTS ////////////////////////////////////
   useEffect(() => {
@@ -179,6 +180,14 @@ const Clients = () => {
     setOpenDeleteModal(true);
   };
 
+  const filteredClients = clients.filter(client =>
+    client.firstName.toLowerCase().includes(search.toLowerCase()) ||
+    client.lastName.toLowerCase().includes(search.toLowerCase()) ||
+    client.username.toLowerCase().includes(search.toLowerCase()) ||
+    client.email.toLowerCase().includes(search.toLowerCase()) ||
+    client.phone.toLowerCase().includes(search.toLowerCase())
+  );
+
   return (
     <div className="w-full">
 
@@ -186,9 +195,9 @@ const Clients = () => {
       <Filter open={openFilters} setOpen={setOpenFilters} />
       <User open={openUser} setOpen={setOpenUser} />
 
-      <Topbar />
+      <Topbar search={search} setSearch={setSearch} />
       <Table
-        rows={clients}
+        rows={filteredClients}
         columns={columns}
         isFetching={isFetching}
         error={error}

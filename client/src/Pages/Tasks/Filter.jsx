@@ -10,62 +10,50 @@ import { DatePicker, DesktopDatePicker, LocalizationProvider } from "@mui/x-date
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { filterTaskReducer } from "../../redux/reducer/task";
+import { CFormSelect } from "@coreui/react";
 
 const FilterDrawer = ({ open, setOpen, setIsFiltered }) => {
   ///////////////////////////////////////////// VARIABLES ////////////////////////////////////////////////////
   const dispatch = useDispatch();
-  const { tasks } = useSelector(state => state.task)
+  const { tasks } = useSelector((state) => state.task);
   const initialFilterState = {
-    completedTask: '',
-    startingCompletedTaskDate: '',
-    endingCompletedTaskDate: '',
-    completedTaskStatus: '',
-    newTask: '',
-    startingNewTaskDeadline: '',
-    endingNewTaskDeadline: '',
-  }
+    completedTask: "",
+    startingCompletedTaskDate: "",
+    endingCompletedTaskDate: "",
+    completedTaskStatus: "",
+    newTask: "",
+    startingNewTaskDeadline: "",
+    endingNewTaskDeadline: "",
+  };
 
   ///////////////////////////////////////////// STATES ////////////////////////////////////////////////////
   const [filters, setFilters] = useState(initialFilterState);
 
   ///////////////////////////////////////////// FUNCTIONS ////////////////////////////////////////////////////
   const handleChange = (field, value) => {
-    setFilters((pre) => ({ ...pre, [field]: value, }));
+    setFilters((pre) => ({ ...pre, [field]: value }));
   };
 
   const handleFilter = () => {
-    dispatch(filterTaskReducer(filters))
-    setIsFiltered(true)
-    setFilters(initialFilterState)
-    setOpen(false)
-  }
+    dispatch(filterTaskReducer(filters));
+    setIsFiltered(true);
+    setFilters(initialFilterState);
+    setOpen(false);
+  };
 
-  const completedTasks = [
-    { title: "New", value: 'new' },
-    { title: "Sent Availablity List", value: 'sentAvailablityList' },
-    { title: "Site Visit", value: 'siteVisit' },
-    { title: "Token Recieved", value: 'tokenRecieved' },
-    { title: "Closed (Won", value: 'closedWon' },
-    { title: "Closed (Lost", value: 'closedLost' },
-    { title: "Followed Up (Call", value: 'followedUpCall' },
-    { title: "Followed Up (Email", value: 'followedUpEmail' },
-    { title: "Contacted Client (Call", value: 'contactedCall' },
-    { title: "Contacted Client (Call Attempt)", value: 'contactedCallAttempt' },
+  const statuses = [
+    { name: "New Client", value: "newClient" },
+    { name: "Follow Up", value: "followUp" },
+    { name: "Contacted Client", value: "contactedClient" },
+    { name: "Call Not Attend", value: "callNotAttend" },
+    { name: "Visit Schedule", value: "visitSchedule" },
+    { name: "Visit Done", value: "visitDone" },
+    { name: "Closed (Won)", value: "closedWon" },
+    { name: "Closed (Lost)", value: "closedLost" },
   ];
-  const newTasks = [
-    { title: "Do Nothing", value: 'doNothing' },
-    { title: "Contact Client", value: 'contactClient' },
-    { title: "Sent Availablity List", value: 'sentAvailablityList' },
-    { title: "Follow Up", value: 'followUp' },
-    { title: "Arrange Meeting", value: 'arrangeMeeting' },
-    { title: "Push Meeting", value: 'pushMeeting' },
-    { title: "Meet Client", value: 'meetClient' },
-    { title: "Sign Agreement", value: 'signAgreement' },
-    { title: "Recieve Token", value: 'recieveToken' },
-  ];
-  const demoStatus = [
-    { title: "Successfull", value: 'successfull' },
-    { title: "Unsuccessfull", value: 'unsuccessfull' },
+  const TaskStatus = [
+    { title: "Successfull", value: "successfull" },
+    { title: "Unsuccessfull", value: "unsuccessfull" },
   ];
 
   return (
@@ -81,33 +69,21 @@ const FilterDrawer = ({ open, setOpen, setIsFiltered }) => {
           </div>
         </div>
         <div className="p-4 flex flex-col gap-4">
-
           {/* Completed Task */}
           <div className="flex flex-col">
             <div>Completed Task : </div>
-            <Select
-              fullWidth
-              size="small"
+            <CFormSelect
               value={filters.completedTask}
-              onChange={(e) => handleChange('completedTask', e.target.value)}
-            >
-              <MenuItem value="">None</MenuItem>
-              <MenuItem value="new">New</MenuItem>
-              <MenuItem value="sentAvailablityList">Sent Availablity List</MenuItem>
-              <MenuItem value="siteVisit">Site Visit</MenuItem>
-              <MenuItem value="tokenRecieved">Token Recieved</MenuItem>
-              <MenuItem value="closedWon">Closed (Won)</MenuItem>
-              <MenuItem value="closedLost">Closed (Lost)</MenuItem>
-              <MenuItem value="followedUpCall">Followed Up (Call)</MenuItem>
-              <MenuItem value="followedUpEmail">Followed Up (Email)</MenuItem>
-              <MenuItem value="contactedCall">Contacted Client (Call)</MenuItem>
-              <MenuItem value="contactedCallAttempt">
-                Contacted Client (Call Attempt)
-              </MenuItem>
-              <MenuItem value="ContactedEmail">Contacted Client (Email)</MenuItem>
-              <MenuItem value="MeetingDone">Meeting (Done)</MenuItem>
-              <MenuItem value="MeetingAttempt">Meeting (Attempt)</MenuItem>
-            </Select>
+              onChange={(e) => handleChange("completedTask", e.target.value)}
+              className="border-[1px] p-2 rounded-md w-full border-[#c1c1c1] cursor-pointer font-primary text-black">
+              <option value="">Select an Option</option>
+
+              {statuses.map((item, key) => (
+                <option key={key} value={item.value}>
+                  {item.name}
+                </option>
+              ))}
+            </CFormSelect>
           </div>
 
           {/* Completed Task State */}
@@ -118,10 +94,9 @@ const FilterDrawer = ({ open, setOpen, setIsFiltered }) => {
               fullWidth
               size="small"
               value={filters.completedTaskStatus}
-              onChange={(e) => handleChange('completedTaskStatus', e.target.value)}
-            >
+              onChange={(e) => handleChange("completedTaskStatus", e.target.value)}>
               <MenuItem value="">None</MenuItem>
-              <MenuItem value="successful">Successful</MenuItem>
+              <MenuItem value="successful">Suchacessful</MenuItem>
               <MenuItem value="unsuccessful">Unsuccessful</MenuItem>
             </Select>
           </div>
@@ -160,23 +135,18 @@ const FilterDrawer = ({ open, setOpen, setIsFiltered }) => {
           {/* new task */}
           <div className="flex flex-col">
             <div>New Task : </div>
-            <Select
-              fullWidth
-              size="small"
+            <CFormSelect
               value={filters.newTask}
-              onChange={(e) => handleChange('newTask', e.target.value)}
-            >
-              <MenuItem value="">None</MenuItem>
-              <MenuItem value="doNothing">Do Nothing</MenuItem>
-              <MenuItem value="contactClient">Contact Client</MenuItem>
-              <MenuItem value="sentAvailablityList">Sent Availablity List</MenuItem>
-              <MenuItem value="followUp">Follow Up</MenuItem>
-              <MenuItem value="arrangeMeeting">Arrange Meeting</MenuItem>
-              <MenuItem value="pushMeeting">Push Meeting</MenuItem>
-              <MenuItem value="meetClient">Meet Client</MenuItem>
-              <MenuItem value="signAgreement">Sign Agreement</MenuItem>
-              <MenuItem value="recieveToken">Recieve Token</MenuItem>
-            </Select>
+              onChange={(e) => handleChange("newTask", e.target.value)}
+              className="border-[1px] p-2 rounded-md w-full border-[#c1c1c1] cursor-pointer font-primary text-black">
+              <option value="">Select an Option</option>
+
+              {statuses.map((item, key) => (
+                <option key={key} value={item.value}>
+                  {item.name}
+                </option>
+              ))}
+            </CFormSelect>
           </div>
 
           {/* new task deadline */}

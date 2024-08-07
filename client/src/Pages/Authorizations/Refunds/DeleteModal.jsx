@@ -2,6 +2,7 @@ import { Modal, Dialog, DialogTitle, DialogContent, DialogActions, Button, Dialo
 import React from 'react'
 import { deleteApproval } from '../../../redux/action/approval'
 import { useDispatch } from 'react-redux'
+import { deleteRefund } from '../../../redux/action/refund'
 
 const DeleteModal = ({ open, setOpen, approvalId }) => {
 
@@ -13,7 +14,7 @@ const DeleteModal = ({ open, setOpen, approvalId }) => {
     setOpen(false)
   }
   const handleDelete = () => {
-    dispatch(deleteApproval(approvalId, "voucher"))
+    dispatch(deleteRefund(approvalId, "refund"))
     setOpen(false)
   }
 

@@ -51,20 +51,6 @@ const Topbar = () => {
         <h1 className="text-primary-blue text-[32px] capitalize font-light">Refund</h1>
 
         <div className="flex items-center justify-end gap-2 md:mt-0 mt-4">
-          <div className="bg-[#ebf2f5] hover:bg-[#dfe6e8] p-1 pl-2 pr-2 rounded-md w-48">
-            <FormControl>
-              <Input
-                name="search"
-                placeholder="Search Follow Ups"
-                onChange={(e) => handleSearch(e.target.value)}
-                startAdornment={
-                  <InputAdornment position="start">
-                    <PiMagnifyingGlass className="text-[25px]" />
-                  </InputAdornment>
-                }
-              />
-            </FormControl>
-          </div>
           <div>
             {
             loggedUser?.role == 'employee' || 'admin' &&  

@@ -12,6 +12,7 @@ import { deleteRefund } from "../../../redux/action/refund";
 import { useDispatch, useSelector } from "react-redux";
 
 const DeleteModal = ({ open, setOpen, refundId }) => {
+
   ////////////////////////////////////// VARIABLES ///////////////////////////////////////
   const dispatch = useDispatch();
   const { isFetching } = useSelector((state) => state.refund);

@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Add, TableBar, ViewKanban } from "@mui/icons-material";
 import { Path } from "../../utils";
-import { IconButton } from "@mui/material";
+import { FormControl, IconButton, Input, InputAdornment } from "@mui/material";
 import CreateVoucher from "./CreateVoucher";
 import { searchVoucherReducer } from "../../redux/reducer/voucher";
+import { PiMagnifyingGlass } from "react-icons/pi";
 
-const Topbar = (view, setView) => {
-
+const Topbar = ({ search, setSearch }) => {
   //////////////////////////////////// VARIABLES ///////////////////////////////////////////////
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -23,8 +23,8 @@ const Topbar = (view, setView) => {
 
   //////////////////////////////////// FUNCTIONS ///////////////////////////////////////////////
   const handleSearch = (searchTerm) => {
-    // dispatch(searchVoucherReducer(searchTerm));
-  }
+    setSearch(searchTerm)
+  };
   const handleAddClick = () => {
     navigate(`${pathname}/create`);
   };
@@ -33,8 +33,6 @@ const Topbar = (view, setView) => {
     setOpen(true);
     setScroll(scrollType);
   };
-
-
 
   return (
     <div className="flex flex-col ">
@@ -46,11 +44,28 @@ const Topbar = (view, setView) => {
         <h1 className="text-primary-blue text-[32px] capitalize">{title}</h1>
 
         {showAddButton && (
-          <button
-            onClick={handleCreateopen("body")}
-            className="bg-primary-red text-white w-[44px] h-[44px] flex justify-center items-center rounded-full shadow-lg">
-            <Add />
-          </button>
+          <div className="flex items-center gap-2">
+            <div className="bg-[#ebf2f5] hover:bg-[#dfe6e8] p-1 pl-2 pr-2 rounded-md w-48">
+              <FormControl>
+                <Input
+                  name="search"
+                  value={search}
+                  onChange={(e) => handleSearch(e.target.value)}
+                  placeholder="Search Employees"
+                  startAdornment={
+                    <InputAdornment position="start">
+                      <PiMagnifyingGlass className="text-[25px]" />
+                    </InputAdornment>
+                  }
+                />
+              </FormControl>
+            </div>
+            <button
+              onClick={handleCreateopen("body")}
+              className="bg-primary-red text-white w-[44px] h-[44px] flex justify-center items-center rounded-full shadow-lg">
+              <Add />
+            </button>
+          </div>
         )}
       </div>
       <CreateVoucher open={open} setOpen={setOpen} scroll={scroll} />

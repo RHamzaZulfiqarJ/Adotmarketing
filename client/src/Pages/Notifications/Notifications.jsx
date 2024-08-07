@@ -13,18 +13,18 @@ function Notifications({ }) {
     const { notifications } = useSelector(state => state.notification)
     const dispatch = useDispatch()
 
-    ////////////////////////////////////// STATES //////////////////////////////
+    ////////////////////////////////////// STATES /////////////////////////////////
     const [openNotification, setOpenNotification] = useState(false)
     const [notificationId, setNotificationId] = useState('')
 
-    ////////////////////////////////////// USE EFFECTS //////////////////////////////
+    ////////////////////////////////////// USE EFFECTS ////////////////////////////
 
     ////////////////////////////////////// FUNCTIONS //////////////////////////////
     const handleDelete = (notificationId) => {
         dispatch(deleteNotification(notificationId))
     }
 
-    ////////////////////////////////////// COMPONENTS //////////////////////////////
+    ////////////////////////////////////// COMPONENTS /////////////////////////////
     const Notification = ({ notification }) => {
         const [showCloseButton, setShowCloseButton] = useState(false)
         return (
@@ -46,11 +46,9 @@ function Notifications({ }) {
     }
 
     return (
-        <div className="w-full h-fit bg-inherit flex flex-col gap-[1rem] ">
+        <div className="w-full h-fit bg-inherit flex flex-col gap-[1rem]">
 
             <Topbar />
-
-            <ViewNotification open={openNotification} setOpen={setOpenNotification} notificationId={notificationId} />
 
             {
                 notifications.map((notification, index) => (

@@ -26,7 +26,7 @@ const Topbar = ({ isFiltered, setIsFiltered }) => {
   };
 
   return (
-    <div className="flex flex-col ">
+    <div className="flex flex-col mb-6">
       <div className="w-full text-[14px]">
         <Path />
       </div>

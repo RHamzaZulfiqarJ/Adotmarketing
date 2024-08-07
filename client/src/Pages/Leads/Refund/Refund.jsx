@@ -25,42 +25,42 @@ const Refund = () => {
       headerName: "ID",
       headerClassName: "super-app-theme--header",
       width: 80,
-      renderCell: (params) => <div className="font-primary font-light">{params.row.uid}</div>,
+      renderCell: (params) => <div className="font-primary font-light">{params.row?.uid}</div>,
     },
     {
       field: "createdAt",
       headerName: "Issuing Date",
       headerClassName: "super-app-theme--header",
       width: 140,
-      renderCell: (params) => <div className="font-primary font-light">{format(params.row.createdAt)}</div>,
+      renderCell: (params) => <div className="font-primary font-light">{format(params.row?.createdAt)}</div>,
     },
     {
       field: "amount",
       headerName: "Amount",
       headerClassName: "super-app-theme--header",
       width: 140,
-      renderCell: (params) => <div className="font-primary font-light">{params.row.amount}</div>,
+      renderCell: (params) => <div className="font-primary font-light">{params.row?.amount}</div>,
     },
     {
       field: "clientName",
       headerName: "Client Name",
       headerClassName: "super-app-theme--header",
       width: 160,
-      renderCell: (params) => <div className="font-primary font-light">{params.row.clientName}</div>,
+      renderCell: (params) => <div className="font-primary font-light">{params.row?.clientName}</div>,
     },
     {
       field: "CNIC",
       headerName: "CNIC",
       headerClassName: "super-app-theme--header",
       width: 120,
-      renderCell: (params) => <div className="font-primary font-light">{params.row.CNIC}</div>,
+      renderCell: (params) => <div className="font-primary font-light">{params.row?.CNIC}</div>,
     },
     {
       field: "phone",
       headerName: "Phone",
       headerClassName: "super-app-theme--header",
       width: 120,
-      renderCell: (params) => <div className="font-primary font-light">{params.row.phone}</div>,
+      renderCell: (params) => <div className="font-primary font-light">{params.row?.phone}</div>,
     },
     {
       field: "status",
@@ -68,17 +68,17 @@ const Refund = () => {
       headerClassName: "super-app-theme--header",
       width: 150,
       renderCell: (params) => <div className={`font-primary font-light border-[1px] p-2 rounded-[3rem]
-      ${params.row.status == 'accepted' && 'border-green-400 text-green-400'}
-      ${params.row.status == 'rejected' && 'border-red-400 text-red-400'}
-      ${params.row.status == 'underProcess' && 'border-amber-400 text-amber-400'}
-      `}>{params.row.status}</div>,
+      ${params.row?.status == 'accepted' && 'border-green-400 text-green-400'}
+      ${params.row?.status == 'rejected' && 'border-red-400 text-red-400'}
+      ${params.row?.status == 'underProcess' && 'border-amber-400 text-amber-400'}
+      `}>{params.row?.status}</div>,
     },
     {
       field: "reason",
       headerName: "Reason",
       headerClassName: "super-app-theme--header",
       width: 250,
-      renderCell: (params) => <Tooltip title={params.row.reason}><div className="font-primary font-light">{params.row.reason}</div></Tooltip>,
+      renderCell: (params) => <Tooltip title={params.row?.reason}><div className="font-primary font-light">{params.row?.reason}</div></Tooltip>,
     },
     {
       field: "actions",
@@ -89,7 +89,7 @@ const Refund = () => {
         <div className="flex gap-[10px] items-center transition-all">
           <Tooltip placement="top" title="Delete">
             <PiTrashLight
-              onClick={() => handleOpenDeleteModal(params.row?._id)}
+              onClick={handleOpenDeleteModal(params.row)}
               className="cursor-pointer text-red-500 text-[23px] hover:text-red-400"
             />
           </Tooltip>
@@ -100,8 +100,7 @@ const Refund = () => {
 
   /////////////////////////////////////////// STATES //////////////////////////////////////////// 
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
-  const [selectedRefundId, setSelectedRefundId] = useState(null);
-
+  const [selectedRefundId, setSelectedRefundId] = useState("");
 
   /////////////////////////////////////////// USE EFFECTS //////////////////////////////////////////// 
   useEffect(() => {
@@ -111,9 +110,12 @@ const Refund = () => {
 
   /////////////////////////////////////////// FUNCTIONS //////////////////////////////////////////// 
   const handleOpenDeleteModal = (refundId) => {
+    console.log(refundId)
     setOpenDeleteModal(true);
-    setSelectedRefundId(refundId);
+    setSelectedRefundId(refundId?._id);
+    console.log(selectedRefundId)
   };
+
 
   return (
     <div className="w-full " >

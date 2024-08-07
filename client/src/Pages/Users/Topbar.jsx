@@ -9,7 +9,7 @@ import CreateUser from "./CreateEmployee";
 import Filter from "./Filter";
 import { searchUserReducer } from "../../redux/reducer/user";
 
-const Topbar = ({ view, setView, setIsFiltered, isFiltered }) => {
+const Topbar = ({ view, setView, setIsFiltered, isFiltered, search, setSearch }) => {
 
   ///////////////////////////////////////// VARIABLES ///////////////////////////////////////////////////
   const { pathname } = useLocation();
@@ -39,7 +39,7 @@ const Topbar = ({ view, setView, setIsFiltered, isFiltered }) => {
 
   ///////////////////////////////////////// FUNCTIONS ///////////////////////////////////////////////////
   const handleSearch = (searchTerm) => {
-    dispatch(searchUserReducer(searchTerm));
+    setSearch(searchTerm);
   }
   const handleToggleFilters = () => {
     setOpenFilters((pre) => !pre);
@@ -73,6 +73,7 @@ const Topbar = ({ view, setView, setIsFiltered, isFiltered }) => {
               <FormControl>
                 <Input
                   name="search"
+                  value={search}
                   onChange={(e) => handleSearch(e.target.value)}
                   placeholder="Search Employees"
                   startAdornment={

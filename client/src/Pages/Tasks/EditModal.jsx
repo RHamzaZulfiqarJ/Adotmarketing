@@ -40,31 +40,15 @@ const EditModal = ({ open, setOpen }) => {
     newTaskDeadline: "",
     newTaskComment: "",
   };
-  const newTasks = [
-    { name: "Do Nothing", value: "doNothing" },
-    { name: "Contact Client", value: "contactClient" },
-    { name: "Sent Availablity List", value: "sentAvailablityList" },
+  const statuses = [
+    { name: "New Client", value: "newClient" },
     { name: "Follow Up", value: "followUp" },
-    { name: "Arrange Meeting", value: "arrangeMeeting" },
-    { name: "Push Meeting", value: "pushMeeting" },
-    { name: "Meet Client", value: "meetClient" },
-    { name: "Sign Agreement", value: "signAgreement" },
-    { name: "Recieve Token", value: "recieveToken" },
-  ];
-  const completedTasks = [
-    { name: "New", value: "new" },
-    { name: "Sent Availablity List", value: "sentAvailablityList" },
-    { name: "Site Visit", value: "siteVisit" },
-    { name: "Token Recieved", value: "tokenRecieved" },
+    { name: "Contacted Client", value: "contactedClient" },
+    { name: "Call Not Attend", value: "callNotAttend" },
+    { name: "Visit Schedule", value: "visitSchedule" },
+    { name: "Visit Done", value: "visitDone" },
     { name: "Closed (Won)", value: "closedWon" },
     { name: "Closed (Lost)", value: "closedLost" },
-    { name: "Followed Up (Call)", value: "followedUpCall" },
-    { name: "Followed Up (Email)", value: "followedUpEmail" },
-    { name: "Contacted Client (Call)", value: "contactedCall" },
-    { name: "Contacted Client (Call Attempt)", value: "contactedCallAttempt" },
-    { name: "Contacted Client (Email)", value: "contactedEmail" },
-    { name: "Meeting (Done)", value: "meetingDone" },
-    { name: "Meeting (Attempt)", value: "meetingAttempt" },
   ];
   ///////////////////////////////////// STATES ////////////////////////////////////////
   const [taskData, setTaskData] = useState(task);
@@ -139,7 +123,7 @@ const EditModal = ({ open, setOpen }) => {
                     value={taskData?.completedTask}
                     onChange={(e) => handleInputChange("completedTask", e.target.value)}
                     className="border-[1px] p-2 rounded-md w-full border-[#c1c1c1] cursor-pointer text-black">
-                    {completedTasks.map((task, index) => (
+                    {statuses.map((task, index) => (
                       <option key={index} value={task.value}>
                         {task.name}
                       </option>
@@ -194,7 +178,7 @@ const EditModal = ({ open, setOpen }) => {
                     value={taskData?.newTask}
                     onChange={(e) => handleInputChange("newTask", e.target.value)}
                     className="border-[1px] p-2 rounded-md w-full border-[#c1c1c1] cursor-pointer text-black">
-                    {newTasks.map((task, index) => (
+                    {statuses.map((task, index) => (
                       <option key={index} value={task.value}>
                         {task.name}
                       </option>

@@ -19,6 +19,9 @@ const FilterDrawer = ({ open, setOpen, setIsFiltered }) => {
   const dispatch = useDispatch();
   const { projects } = useSelector((state) => state.project);
   const { employees } = useSelector((state) => state.user);
+  const { loggedUser } = useSelector((state) => state.user);
+
+  let role = loggedUser?.role;
 
   const priorities = [
     { name: "Very Cold", value: "veryCold" },
@@ -192,16 +195,18 @@ const FilterDrawer = ({ open, setOpen, setIsFiltered }) => {
             renderInput={(params) => <TextField {...params} label="Project" />}
           />
 
-          <Autocomplete
-            size="small"
-            disablePortal
-            id="combo-box-demo"
-            options={employeeList}
-            getOptionLabel={(option) => option.name}
-            onChange={(e, value) => handleChange("allocatedTo", value?.value)}
-            className="w-full"
-            renderInput={(params) => <TextField {...params} label="Employee" />}
-          />
+          {role == "super_admin" && (
+            <Autocomplete
+              size="small"
+              disablePortal
+              id="combo-box-demo"
+              options={employeeList}
+              getOptionLabel={(option) => option.name}
+              onChange={(e, value) => handleChange("allocatedTo", value?.value)}
+              className="w-full"
+              renderInput={(params) => <TextField {...params} label="Employee" />}
+            />
+          )}
 
           <div className="flex gap-4 justify-end">
             <button className="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded-lg font-primary">

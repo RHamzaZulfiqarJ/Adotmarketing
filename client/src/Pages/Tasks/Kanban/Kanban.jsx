@@ -4,9 +4,9 @@ import { DragDropContext } from 'react-beautiful-dnd';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateTask } from '../../../redux/action/task';
 import { Loader } from '../../../utils';
-import { ThreeDots } from 'react-loader-spinner';
 
 const Kanban = ({ options, setOptions }) => {
+  
   const dispatch = useDispatch();
   const { tasks, isFetching } = useSelector((state) => state.task);
   const archivedTasks = tasks.filter((task) => task.isArchived);
@@ -34,7 +34,6 @@ const Kanban = ({ options, setOptions }) => {
     // Update the state with the new object
     setFilteredTasks(updatedFilteredTasks);
   }, [options.showArchivedTasks]);
-  
 
   const handleDragEnd = (result) => {
     if (!result.destination) return;
@@ -64,9 +63,9 @@ const Kanban = ({ options, setOptions }) => {
   const getSourceColumn = (droppableId) => {
     switch (droppableId) {
       case '1':
-        return { column: successful, title: 'successful' };
+        return { column: successful, title: 'successful', _id: '1' };
       case '2':
-        return { column: unsuccessful, title: 'unsuccessful' };
+        return { column: unsuccessful, title: 'unsuccessful', _id: '2' };
       default:
         return { column: [], title: '' };
     }

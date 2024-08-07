@@ -114,6 +114,7 @@ function Vouchers() {
   const [openViewModal, setOpenViewModal] = useState(false);
   const [selectedVoucherId, setSelectedVoucherId] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [search, setSearch] = useState("")
 
   //////////////////////////////////////// USE EFFECTS //////////////////////////////////
   useEffect(() => {
@@ -127,6 +128,15 @@ function Vouchers() {
     });
   };
 
+  const filteredVouchers = vouchers.filter((voucher) => {
+    return (
+      voucher.clientName.toLowerCase().includes(search.toLowerCase()) ||
+      voucher.uid.toLowerCase().includes(search.toLowerCase()) ||
+      voucher.project.title.toLowerCase().includes(search.toLowerCase()) ||
+      voucher.status.toLowerCase().includes(search.toLowerCase())
+    );
+  });
+
   return (
     <div className="h-full w-full float-left pb-28">
       <View open={openViewModal} setOpen={setOpenViewModal} />
@@ -136,9 +146,9 @@ function Vouchers() {
         voucherId={selectedVoucherId}
       />
 
-      <Topbar />
+      <Topbar search={search} setSearch={setSearch} />
       <Table
-        rows={vouchers}
+        rows={filteredVouchers}
         columns={columns}
         isFetching={isFetching}
         error={error}

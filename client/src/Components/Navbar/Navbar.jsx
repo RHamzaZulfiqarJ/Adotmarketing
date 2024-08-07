@@ -182,7 +182,7 @@ const Navbar = ({ setShowSidebar, showSidebar, open, setOpen }) => {
                       {notifications.slice(0, 5).map((notification, index) => (
                         <React.Fragment key={index}>
                           <StyledMenuItem
-                            onClick={() => navigate("/authorization/refund")}
+                            onClick={() => navigate("/authorization/request")}
                             className="text-gray-600 flex items-center gap-2">
                             <div>
                               <Avatar />
@@ -199,7 +199,7 @@ const Navbar = ({ setShowSidebar, showSidebar, open, setOpen }) => {
                         </React.Fragment>
                       ))}
                       {notifications.length > 5 && (
-                        <Link to="/notifications" className="hover:underline text-blue-500 ">
+                        <Link to="/notifications" className="hover:underline text-blue-500 p-4 flex justify-center">
                           More
                         </Link>
                       )}
@@ -237,7 +237,7 @@ const Navbar = ({ setShowSidebar, showSidebar, open, setOpen }) => {
                     </React.Fragment>
                   ))}
                   {tasks.length > 5 && (
-                    <Link to="/tasks" className="hover:underline text-blue-500 ">
+                    <Link to="/tasks" className="hover:underline text-blue-500  p-4 flex justify-center">
                       More
                     </Link>
                   )}

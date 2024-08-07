@@ -7,7 +7,7 @@ import { FiFilter } from "react-icons/fi";
 import FilterDrawer from "./Filter";
 import { PiMagnifyingGlass } from "react-icons/pi";
 
-const Topbar = ({ isFiltered, setIsFiltered }) => {
+const Topbar = ({ isFiltered, setIsFiltered, search, setSearch }) => {
 
   //////////////////////////////////////////// VARIABLES //////////////////////////////////////////////////// 
   const navigate = useNavigate();
@@ -22,16 +22,12 @@ const Topbar = ({ isFiltered, setIsFiltered }) => {
   //////////////////////////////////////////// USE EFFECTS //////////////////////////////////////////////////// 
 
   //////////////////////////////////////////// FUNCTIONS//////////////////////////////////////////////////// 
-  const handleAddClick = () => {
-    navigate(`${pathname}/create`);
-  };
-
-  const handleToggleFilters = () => {
-    setOpenFilters((pre) => !pre);
-  };
+  const handleSearch = (searchTerm) => {
+    setSearch(searchTerm);
+  }
 
   return (
-    <div className="flex flex-col ">
+    <div className="flex flex-col mb-6">
       <div className="w-full text-[14px] ">
         <Path />
       </div>
@@ -53,6 +49,7 @@ const Topbar = ({ isFiltered, setIsFiltered }) => {
               <FormControl>
                 <Input
                   name="search"
+                  value={search}
                   placeholder="Search Requests"
                   onChange={(e) => handleSearch(e.target.value)}
                   startAdornment={
@@ -63,16 +60,6 @@ const Topbar = ({ isFiltered, setIsFiltered }) => {
                 />
               </FormControl>
             </div>
-            <Tooltip title="Filter" arrow placement="top">
-              <div
-                onClick={handleToggleFilters}
-                className={` p-2 rounded-md cursor-pointer ${openFilters
-                  ? "text-[#20aee3] bg-[#e4f1ff]"
-                  : "bg-[#ebf2f5] hover:bg-[#dfe6e8] text-[#a6b5bd]"
-                  }`}>
-                <FiFilter className="text-[25px] " />
-              </div>
-            </Tooltip>
           </div>
         )}
       </div>

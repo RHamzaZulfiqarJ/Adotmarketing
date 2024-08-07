@@ -132,7 +132,7 @@ const Topbar = ({ options, setOptions, openFilters, setOpenFilters, isFiltered, 
                 <FiUser className="text-[25px] " />
               </div>
             </Tooltip>
-            <Tooltip title="View" arrow placement="top">
+            {/* <Tooltip title="View" arrow placement="top">
               <div
                 onClick={handleToggleIsKanbanView}
                 className={` p-2 rounded-md cursor-pointer ${options?.isKanbanView
@@ -141,7 +141,7 @@ const Topbar = ({ options, setOptions, openFilters, setOpenFilters, isFiltered, 
                   }`}>
                 <FiList className="text-[25px] " />
               </div>
-            </Tooltip>
+            </Tooltip> */}
             <Tooltip title="Filter" arrow placement="top">
               <div
                 onClick={handleToggleFilters}

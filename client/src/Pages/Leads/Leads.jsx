@@ -102,11 +102,9 @@ function Leads({ type, showSidebar }) {
   const navigate = useNavigate();
   const { leads, allLeads, isFetching, error } = useSelector((state) => state.lead);
   const { currentProject } = useSelector((state) => state.project);
-  const archivedLeads = leads.filter((lead) => lead.isArchived);
-  const unarchivedLeads = leads.filter((lead) => !lead.isArchived);
   const { loggedUser } = useSelector((state) => state.user);
   const role = loggedUser.role;
-  
+
   const columns = [
     {
       field: "uid",
@@ -170,23 +168,16 @@ function Leads({ type, showSidebar }) {
           ${params.row?.status == "closedWon" ? "border-green-500 text-green-500" : ""} 
           ${params.row?.status == "closedLost" ? "border-red-400 text-red-400" : ""} 
           ${params.row?.status == "followUp" ? "border-sky-400 text-sky-400" : ""}
-          ${
-            params.row?.status == "contactedClient" ? "border-orange-400 text-orange-400" : ""
-          } 
+          ${params.row?.status == "contactedClient" ? "border-orange-400 text-orange-400" : ""} 
           ${params.row?.status == "callNotAttend" ? "border-lime-400 text-lime-500" : ""} 
           ${params.row?.status == "visitSchedule" ? "border-teal-400 text-teal-500" : ""} 
           ${params.row?.status == "visitDone" ? "border-indigo-400 text-indigo-500" : ""}
           ${params.row?.status == "newClient" ? "border-rose-700 text-rose-700" : ""}`}>
-
           <span>
             {params.row?.status == "closedWon" ? <div>Closed Won</div> : <div></div>}
             {params.row?.status == "closedLost" ? <div>Closed Lost</div> : <div></div>}
             {params.row?.status == "followUp" ? <div>Follow Up</div> : <div></div>}
-            {params.row?.status == "ContactedClient" ? (
-              <div>Contacted Client</div>
-            ) : (
-              <div></div>
-            )}
+            {params.row?.status == "contactedClient" ? <div>Contacted Client</div> : <div></div>}
             {params.row?.status == "callNotAttend" ? <div>Call Not Attend</div> : <div></div>}
             {params.row?.status == "visitSchedule" ? <div>Visit Schedule</div> : <div></div>}
             {params.row?.status == "visitDone" ? <div>Visit Done</div> : <div></div>}
@@ -215,19 +206,19 @@ function Leads({ type, showSidebar }) {
         <div className="capitalize font-primary font-light">
           {params.row?.allocatedTo?.length > 1
             ? params.row?.allocatedTo?.map((item, key) => (
-                <Tooltip
-                  className="capitalize flex gap-2"
-                  key={key}
-                  title={`• ${item?.firstName}`}
-                  arrow>
-                  • {item?.firstName}
-                </Tooltip>
-              ))
+              <Tooltip
+                className="capitalize flex gap-2"
+                key={key}
+                title={`• ${item?.firstName}`}
+                arrow>
+                • {item?.firstName}
+              </Tooltip>
+            ))
             : params.row?.allocatedTo?.map((item, key) => (
-                <Tooltip className="capitalize flex gap-2" key={key} title={item?.firstName} arrow>
-                  {item?.firstName}
-                </Tooltip>
-              ))}
+              <Tooltip className="capitalize flex gap-2" key={key} title={item?.firstName} arrow>
+                {item?.firstName}
+              </Tooltip>
+            ))}
         </div>
       ),
     },
@@ -268,21 +259,19 @@ function Leads({ type, showSidebar }) {
             </Tooltip>
 
             <Menu slots={{ listbox: StyledListbox }}>
-              {
-                params.row.isArchived ? (
-                  <StyledMenuItem
-                    onClick={() => handleUnArchive(params.row)}
-                    className="text-gray-600 flex font-primary">
-                    Unarchive
-                  </StyledMenuItem>
-                ) : (
-                  <StyledMenuItem
-                    onClick={() => handleArchive(params.row)}
-                    className="text-gray-600 flex font-primary">
-                    Archive
-                  </StyledMenuItem>
-                )
-              }
+              {params.row.isArchived ? (
+                <StyledMenuItem
+                  onClick={() => handleUnArchive(params.row)}
+                  className="text-gray-600 flex font-primary">
+                  Unarchive
+                </StyledMenuItem>
+              ) : (
+                <StyledMenuItem
+                  onClick={() => handleArchive(params.row)}
+                  className="text-gray-600 flex font-primary">
+                  Archive
+                </StyledMenuItem>
+              )}
               <StyledMenuItem
                 className="text-gray-600 flex font-primary"
                 onClick={() => handleOpenStatusModal(params.row)}>
@@ -323,8 +312,8 @@ function Leads({ type, showSidebar }) {
   ////////////////////////////////////// STATES //////////////////////////////
   const [search, setSearch] = useState("");
   const [openAttachmentModal, setOpenAttachmentModal] = useState(false);
+  const [filteredLeads, setFilteredLeads] = useState(leads);
   const [openEditModal, setOpenEditModal] = useState(false);
-  const [openViewModal, setOpenViewModal] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openStatusModal, setOpenStatusModal] = useState(false);
   const [openShiftLeadModal, setOpenShiftLeadModal] = useState(false);
@@ -348,12 +337,35 @@ function Leads({ type, showSidebar }) {
     }
   }, [isFiltered]);
 
+  useEffect(() => {
+    let updatedLeads = leads;
+    if (search) {
+      updatedLeads = leads.filter(lead =>
+        lead.clientName.toLowerCase().includes(search.toLowerCase()) ||
+        lead.clientPhone.toLowerCase().includes(search.toLowerCase()) ||
+        lead.uid.toLowerCase().includes(search.toLowerCase())
+      );
+    }
+    if (options.showArchivedLeads) {
+      updatedLeads = updatedLeads.filter(lead => lead.isArchived);
+    } else {
+      updatedLeads = updatedLeads.filter(lead => !lead.isArchived);
+    }
+    setFilteredLeads(updatedLeads);
+  }, [search, leads, options.showArchivedLeads]);
+
+  const archivedLeads = filteredLeads.filter((lead) => lead.isArchived);
+  const unarchivedLeads = filteredLeads.filter((lead) => !lead.isArchived);
+
   ////////////////////////////////////// FUNCTION //////////////////////////////
   const handleArchive = (lead) => {
-    dispatch(updateLead(lead._id, { isArchived: true }, { loading: false }));
+    dispatch(updateLead(lead._id, { isArchived: true }, { loading: false }))
+      .then(() => dispatch(getLeads()));
   };
+  
   const handleUnArchive = (lead) => {
-    dispatch(updateLead(lead._id, { isArchived: false }, { loading: false }));
+    dispatch(updateLead(lead._id, { isArchived: false }, { loading: false }))
+      .then(() => dispatch(getLeads()));
   };
   const handleOpenAttachmentModal = (leadId) => {
     setSelectedLeadId(leadId);
@@ -420,8 +432,8 @@ function Leads({ type, showSidebar }) {
       ) : (
         <CCallout color="primary">
           <Table
-            rows={options.showArchivedLeads ? archivedLeads : unarchivedLeads}
             columns={modifiedColumns}
+            rows={filteredLeads}
             rowsPerPage={10}
             isFetching={isFetching}
             showSidebar={showSidebar}

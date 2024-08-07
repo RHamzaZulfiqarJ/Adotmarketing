@@ -19,7 +19,7 @@ export const getVoucher = async (req, res, next) => {
 export const getVouchers = async (req, res, next) => {
     try {
 
-        const findedVouchers = await Voucher.find().populate('project').exec()
+        const findedVouchers = await Voucher.find().populate('allocatedTo', 'firstName lastName').populate('project').exec()
         res.status(200).json({ result: findedVouchers, message: 'vouchers fetched successfully', success: true })
 
     } catch (err) {
@@ -41,6 +41,9 @@ export const createVoucher = async (req, res, next) => {
         const { branch, propertyType, area, project, issuingDate, dueDate, clientName, CNIC, phone, type, cheque, total, paid, remained, note } = req.body
         
         const newVoucher = await Voucher.create({ branch, propertyType, area, project, issuingDate, dueDate, clientName, CNIC, phone, type, cheque, total, paid, remained, note, allocatedTo: req.user?._id })
+
+        await newVoucher.populate('allocatedTo', 'firstName lastName')
+
         res.status(200).json({ result: newVoucher, message: 'voucher created successfully', success: true })
 
     } catch (err) {

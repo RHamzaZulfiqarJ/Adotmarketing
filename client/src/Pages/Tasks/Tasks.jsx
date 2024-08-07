@@ -3,11 +3,11 @@ import { Table } from "../../Components";
 import Topbar from "./Topbar";
 import Task from "./Task";
 import { useDispatch, useSelector } from "react-redux";
-import { getTasks } from "../../redux/action/task";
+import { getTasks, updateTask } from "../../redux/action/task";
 import EditModal from "./EditModal";
 import DeleteModal from "./DeleteModal";
 import { getTaskReducer, getTasksReducer } from "../../redux/reducer/task";
-import { PiArchiveThin, PiDotsThreeOutlineThin, PiTrashLight } from "react-icons/pi";
+import { PiArchiveBoxLight, PiArchiveLight, PiArchiveThin, PiDotsThreeOutlineThin, PiTrashLight } from "react-icons/pi";
 import { CiEdit } from "react-icons/ci";
 import { format } from "timeago.js";
 import { Dropdown, Menu, MenuButton, MenuItem, menuItemClasses } from "@mui/base";
@@ -112,32 +112,25 @@ function Tasks() {
       headerClassName: "super-app-theme--header",
       renderCell: (params) => (
         <span
-          className="cursor-pointer text-[#20aee3] hover:text-[#007bff] capitalize font-primary font-light"
-          onClick={() => handleClickOpen(params.row)}>
-          {params.row.completedTask == "sentAvailablityList" ? (
-            <div>Sent Availability List</div>
-          ) : (
-            <div></div>
-          )}
-          {params.row.completedTask == "siteVisit" ? <div>Site Visit</div> : <div></div>}
-          {params.row.completedTask == "tokenRecieved" ? <div>Token Received</div> : <div></div>}
-          {params.row.completedTask == "closedWon" ? <div>Closed Won</div> : <div></div>}
-          {params.row.completedTask == "closedLost" ? <div>Closed Lost</div> : <div></div>}
-          {params.row.completedTask == "followedUpCall" ? <div>Followed Up Call</div> : <div></div>}
-          {params.row.completedTask == "followedUpEmail" ? (
-            <div>Followed Up Email</div>
-          ) : (
-            <div></div>
-          )}
-          {params.row.completedTask == "contactedCall" ? <div>Contacted Call</div> : <div></div>}
-          {params.row.completedTask == "contactedCallAttempt" ? (
-            <div>Contacted Call Attempt</div>
-          ) : (
-            <div></div>
-          )}
-          {params.row.completedTask == "ContactedEmail" ? <div>Contact Email</div> : <div></div>}
-          {params.row.completedTask == "MeetingDone" ? <div>Meeting Done</div> : <div></div>}
-          {params.row.completedTask == "MeetingAttempt" ? <div>Meeting Attempt</div> : <div></div>}
+          className={`border-[1px] px-[8px] py-[4px] rounded-full capitalize font-primary font-medium 
+          ${params.row?.completedTask == "closedWon" ? "border-green-500 text-green-500" : ""} 
+          ${params.row?.completedTask == "closedLost" ? "border-red-400 text-red-400" : ""} 
+          ${params.row?.completedTask == "followUp" ? "border-sky-400 text-sky-400" : ""}
+          ${params.row?.completedTask == "contactedClient" ? "border-orange-400 text-orange-400" : ""} 
+          ${params.row?.completedTask == "callNotAttend" ? "border-lime-400 text-lime-500" : ""} 
+          ${params.row?.completedTask == "visitSchedule" ? "border-teal-400 text-teal-500" : ""} 
+          ${params.row?.completedTask == "visitDone" ? "border-indigo-400 text-indigo-500" : ""}
+          ${params.row?.completedTask == "newClient" ? "border-rose-700 text-rose-700" : ""}`}>
+          <span>
+            {params.row?.completedTask == "closedWon" ? <div>Closed Won</div> : <div></div>}
+            {params.row?.completedTask == "closedLost" ? <div>Closed Lost</div> : <div></div>}
+            {params.row?.completedTask == "followUp" ? <div>Follow Up</div> : <div></div>}
+            {params.row?.completedTask == "contactedClient" ? <div>Contacted Client</div> : <div></div>}
+            {params.row?.completedTask == "callNotAttend" ? <div>Call Not Attend</div> : <div></div>}
+            {params.row?.completedTask == "visitSchedule" ? <div>Visit Schedule</div> : <div></div>}
+            {params.row?.completedTask == "visitDone" ? <div>Visit Done</div> : <div></div>}
+            {params.row?.completedTask == "newClient" ? <div>New Client</div> : <div></div>}
+          </span>
         </span>
       ),
     },
@@ -173,25 +166,27 @@ function Tasks() {
       width: 200,
       headerClassName: "super-app-theme--header",
       renderCell: (params) => (
-        <Tooltip className="capitalize font-primary" placeholder="bottom" arrow title="">
-          <span className="cursor-pointer text-[#20aee3] hover:text-[#007bff] capitalize font-primary font-light"
-                onClick={() => handleClickOpen(params.row)}
-          >
-            {params.row.newTask == "doNothing" ? <div>Do Nothing</div> : <div></div>}
-            {params.row.newTask == "contactClient" ? <div>Contact Client</div> : <div></div>}
-            {params.row.newTask == "sentAvailablityList" ? (
-              <div>Sent Availability List</div>
-            ) : (
-              <div></div>
-            )}
-            {params.row.newTask == "followUp" ? <div>Follow Up</div> : <div></div>}
-            {params.row.newTask == "arrangeMeeting" ? <div>Arrange Meeting</div> : <div></div>}
-            {params.row.newTask == "pushMeeting" ? <div>Push Meeting</div> : <div></div>}
-            {params.row.newTask == "meetClient" ? <div>Meet Client</div> : <div></div>}
-            {params.row.newTask == "signAgreement" ? <div>Sign Agreement</div> : <div></div>}
-            {params.row.newTask == "recieveToken" ? <div>Recieve Token</div> : <div></div>}
+        <span
+          className={`border-[1px] px-[8px] py-[4px] rounded-full capitalize font-primary font-medium 
+          ${params.row?.newTask == "closedWon" ? "border-green-500 text-green-500" : ""} 
+          ${params.row?.newTask == "closedLost" ? "border-red-400 text-red-400" : ""} 
+          ${params.row?.newTask == "followUp" ? "border-sky-400 text-sky-400" : ""}
+          ${params.row?.newTask == "contactedClient" ? "border-orange-400 text-orange-400" : ""} 
+          ${params.row?.newTask == "callNotAttend" ? "border-lime-400 text-lime-500" : ""} 
+          ${params.row?.newTask == "visitSchedule" ? "border-teal-400 text-teal-500" : ""} 
+          ${params.row?.newTask == "visitDone" ? "border-indigo-400 text-indigo-500" : ""}
+          ${params.row?.newTask == "newClient" ? "border-rose-700 text-rose-700" : ""}`}>
+          <span>
+            {params.row?.newTask == "closedWon" ? <div>Closed Won</div> : <div></div>}
+            {params.row?.newTask == "closedLost" ? <div>Closed Lost</div> : <div></div>}
+            {params.row?.newTask == "followUp" ? <div>Follow Up</div> : <div></div>}
+            {params.row?.newTask == "contactedClient" ? <div>Contacted Client</div> : <div></div>}
+            {params.row?.newTask == "callNotAttend" ? <div>Call Not Attend</div> : <div></div>}
+            {params.row?.newTask == "visitSchedule" ? <div>Visit Schedule</div> : <div></div>}
+            {params.row?.newTask == "visitDone" ? <div>Visit Done</div> : <div></div>}
+            {params.row?.newTask == "newClient" ? <div>New Client</div> : <div></div>}
           </span>
-        </Tooltip>
+        </span>
       ),
     },
     {
@@ -212,13 +207,13 @@ function Tasks() {
       headerClassName: "super-app-theme--header",
       renderCell: (params) => (
         <div className="flex gap-[10px] ">
-          {/* <Tooltip placement="top" title="Delete">
+          <Tooltip placement="top" title="Delete">
             {" "}
             <PiTrashLight
               onClick={() => handleOpenDeleteModal(params.row._id)}
               className="cursor-pointer text-red-500 text-[23px] hover:text-red-400"
             />
-          </Tooltip> */}
+          </Tooltip>
           <Tooltip placement="top" title="View">
             {" "}
             <IoOpenOutline
@@ -233,21 +228,16 @@ function Tasks() {
               className="cursor-pointer text-green-500 text-[23px] hover:text-green-600"
             />
           </Tooltip>
-
-          <Dropdown>
-            <Tooltip title="More" arrow placement="top">
-              <MenuButton>
-                <PiDotsThreeOutlineThin className="cursor-pointer text-[23px] text-gray-500 hover:text-gray-700" />
-              </MenuButton>
-            </Tooltip>
-            <Menu slots={{ listbox: StyledListbox }}>
-              <StyledMenuItem
-                className="text-gray-500 flex font-primary"
-                onClick={() => handleOpenArchive(params.row)}>
-                Archive
-              </StyledMenuItem>
-            </Menu>
-          </Dropdown>
+          <Tooltip arrow placement="top" title={params.row.isArchived ? "Un Archive" : "Archive"}>
+            {" "}
+            {
+              params.row?.isArchived
+                ?
+                <PiArchiveLight onClick={() => handleUnArchive(params.row)} className="cursor-pointer text-amber-500 text-[23px] hover:text-amber-600" />
+                :
+                <PiArchiveBoxLight onClick={() => handleArchive(params.row)} className="cursor-pointer text-amber-500 text-[23px] hover:text-amber-600" />
+            }
+          </Tooltip>
         </div>
       ),
     },
@@ -271,6 +261,7 @@ function Tasks() {
   useEffect(() => {
     dispatch(getTasks());
   }, []);
+
   useEffect(() => {
     if (!isFiltered) {
       dispatch(getTasksReducer(allTasks));
@@ -278,13 +269,15 @@ function Tasks() {
   }, [isFiltered]);
 
   ////////////////////////////////////// FUNCTION //////////////////////////////
-  const handleOpenStatusModal = (task) => {
-    setOpenStatusModal(true);
-    dispatch(getTaskReducer(task));
+  const handleArchive = (task) => {
+    dispatch(updateTask(task._id, { isArchived: true }, { loading: false })).then(() =>
+      dispatch(getTasks())
+    );
   };
-  const handleOpenArchive = () => {
-    //
-    //
+  const handleUnArchive = (task) => {
+    dispatch(updateTask(task._id, { isArchived: false }, { loading: false })).then(() =>
+      dispatch(getTasks())
+    );
   };
   const handleClickOpen = (task) => {
     dispatch(getTaskReducer(task));
@@ -298,7 +291,7 @@ function Tasks() {
     setSelectedTaskId(taskId);
     setOpenDeleteModal(true);
   };
-console.log('that')
+  
   return (
     <div className="w-full h-fit bg-inherit flex flex-col">
       <EditModal open={openEditModal} setOpen={setOpenEditModal} />

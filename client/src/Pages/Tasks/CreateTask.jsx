@@ -19,6 +19,7 @@ import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
+import { CFormSelect } from "@coreui/react";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="down" ref={ref} {...props} />;
@@ -78,6 +79,17 @@ const CreateTask = ({ open, setOpen, openFromNavbar, setOpenFromNavbar }) => {
     setOpenFromNavbar(false);
   };
 
+  const statuses = [
+    { name: "New Client", value: "newClient" },
+    { name: "Follow Up", value: "followUp" },
+    { name: "Contacted Client", value: "contactedClient" },
+    { name: "Call Not Attend", value: "callNotAttend" },
+    { name: "Visit Schedule", value: "visitSchedule" },
+    { name: "Visit Done", value: "visitDone" },
+    { name: "Closed (Won)", value: "closedWon" },
+    { name: "Closed (Lost)", value: "closedLost" },
+  ];
+
   return (
     <div>
       <Dialog
@@ -96,7 +108,7 @@ const CreateTask = ({ open, setOpen, openFromNavbar, setOpenFromNavbar }) => {
         </DialogTitle>
         <DialogContent>
           <div className="flex flex-col gap-2 p-3 text-gray-500">
-            <div className="text-xl flex justify-start items-center gap-2 font-normal">
+            <div className="text-xl flex justify-start items-center gap-2 font-primary">
               <PiNotepad size={23} />
               <span>Task Detials</span>
             </div>
@@ -105,27 +117,18 @@ const CreateTask = ({ open, setOpen, openFromNavbar, setOpenFromNavbar }) => {
               <tr>
                 <td className="pb-4 text-lg">Task </td>
                 <td className="pb-4">
-                  <Select
-                    fullWidth
-                    size="small"
+                  <CFormSelect
                     value={taskData.completedTask}
-                    onChange={(e) => handleInputChange("completedTask", e.target.value)}>
-                    <MenuItem value="new">New</MenuItem>
-                    <MenuItem value="sentAvailablityList">Sent Availablity List</MenuItem>
-                    <MenuItem value="siteVisit">Site Visit</MenuItem>
-                    <MenuItem value="tokenRecieved">Token Recieved</MenuItem>
-                    <MenuItem value="closedWon">Closed (Won)</MenuItem>
-                    <MenuItem value="closedLost">Closed (Lost)</MenuItem>
-                    <MenuItem value="followedUpCall">Followed Up (Call)</MenuItem>
-                    <MenuItem value="followedUpEmail">Followed Up (Email)</MenuItem>
-                    <MenuItem value="contactedCall">Contacted Client (Call)</MenuItem>
-                    <MenuItem value="contactedCallAttempt">
-                      Contacted Client (Call Attempt)
-                    </MenuItem>
-                    <MenuItem value="ContactedEmail">Contacted Client (Email)</MenuItem>
-                    <MenuItem value="MeetingDone">Meeting (Done)</MenuItem>
-                    <MenuItem value="MeetingAttempt">Meeting (Attempt)</MenuItem>
-                  </Select>
+                    onChange={(e) => handleInputChange("completedTask", e.target.value)}
+                    className="border-[1px] p-2 rounded-md w-full border-[#c1c1c1] cursor-pointer font-primary text-black">
+                    <option value="">Select an Option</option>
+
+                    {statuses.map((item, key) => (
+                      <option key={key} value={item.value}>
+                        {item.name}
+                      </option>
+                    ))}
+                  </CFormSelect>
                 </td>
               </tr>
               <tr>
@@ -136,16 +139,9 @@ const CreateTask = ({ open, setOpen, openFromNavbar, setOpenFromNavbar }) => {
                     value={taskData.completedTaskDate}
                     onChange={(e) => handleInputChange("completedTaskDate", e.target.value)}
                     size="small"
+                    className="font-primary"
                     fullWidth
                   />
-                  {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DemoContainer components={["DesktopDatePicker"]}>
-                      <DesktopDatePicker
-                        onChange={(date) => handleInputChange("completedTaskDate", date.$d)}
-                        slotProps={{ textField: { size: "small", fullWidth: "true" } }}
-                      />
-                    </DemoContainer>
-                  </LocalizationProvider> */}
                 </td>
               </tr>
               <tr>
@@ -179,21 +175,18 @@ const CreateTask = ({ open, setOpen, openFromNavbar, setOpenFromNavbar }) => {
               <tr>
                 <td className="pb-4 text-lg">Next Task </td>
                 <td className="pb-4">
-                  <Select
-                    fullWidth
-                    size="small"
+                  <CFormSelect
                     value={taskData.newTask}
-                    onChange={(e) => handleInputChange("newTask", e.target.value)}>
-                    <MenuItem value="doNothing">Do Nothing</MenuItem>
-                    <MenuItem value="contactClient">Contact Client</MenuItem>
-                    <MenuItem value="sentAvailablityList">Sent Availablity List</MenuItem>
-                    <MenuItem value="followUp">Follow Up</MenuItem>
-                    <MenuItem value="arrangeMeeting">Arrange Meeting</MenuItem>
-                    <MenuItem value="pushMeeting">Push Meeting</MenuItem>
-                    <MenuItem value="meetClient">Meet Client</MenuItem>
-                    <MenuItem value="signAgreement">Sign Agreement</MenuItem>
-                    <MenuItem value="recieveToken">Recieve Token</MenuItem>
-                  </Select>
+                    onChange={(e) => handleInputChange("newTask", e.target.value)}
+                    className="border-[1px] p-2 rounded-md w-full border-[#c1c1c1] cursor-pointer font-primary text-black">
+                    <option value="">Select an Option</option>
+
+                    {statuses.map((item, key) => (
+                      <option key={key} value={item.value}>
+                        {item.name}
+                      </option>
+                    ))}
+                  </CFormSelect>
                 </td>
               </tr>
               <tr>
@@ -206,14 +199,6 @@ const CreateTask = ({ open, setOpen, openFromNavbar, setOpenFromNavbar }) => {
                     size="small"
                     fullWidth
                   />
-                  {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DemoContainer components={["DesktopDatePicker"]}>
-                      <DesktopDatePicker
-                        onChange={(date) => handleInputChange("newTaskDeadline", date.$d)}
-                        slotProps={{ textField: { size: "small", fullWidth: "true" } }}
-                      />
-                    </DemoContainer>
-                  </LocalizationProvider> */}
                 </td>
               </tr>
               <tr>

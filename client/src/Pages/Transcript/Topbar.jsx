@@ -9,7 +9,7 @@ import { FiFilter } from "react-icons/fi";
 import SetDeductions from "./SetDeductions";
 import ShowDeductions from "./ShowDeductions";
 
-const Topbar = () => {
+const Topbar = ({ search, setSearch }) => {
   ///////////////////////////////////////// VARIABLES ////////////////////////////////////////////////
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -42,6 +42,10 @@ const Topbar = () => {
     setOpenDeductionModal(true);
     setScroll(scrollType);
   };
+
+  const handleSearch = (value) => {
+    setSearch(value);
+  }
 
   return (
     <div className="flex flex-col pb-6">

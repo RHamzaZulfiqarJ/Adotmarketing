@@ -34,7 +34,7 @@ const Upload = ({ image, isMultiple }) => {
     ///////////////////////////////////// COMPONENTS ////////////////////////////////////////
     const Image = ({ url }) => (
         <div className="w-full h-full relative flex justify-center items-center ">
-            <img src={url} alt="" className="rounded-[8px] w-full h-full bg-cover bg-no-repeat object-center" />
+            <img src={url} alt="" className="rounded-[8px] bg-no-repeat object-fit" />
             <button onClick={(e) => handleDelete(e, url)} className="absolute top-[4px] right-[4px] rounded-full bg-black text-white w-[20px] h-[20px] flex justify-center items-center   " ><Clear style={{ fontSize: '16px' }} /></button>
         </div>
     )

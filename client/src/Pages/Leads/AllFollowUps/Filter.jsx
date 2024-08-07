@@ -1,24 +1,99 @@
-import React, { useState } from "react";
-import { Drawer, TextField, Autocomplete, Select, MenuItem } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Drawer, Button, TextField, Autocomplete, Select, MenuItem } from "@mui/material";
+import { Close } from "@mui/icons-material";
+import { useDispatch, useSelector } from "react-redux";
+import { filterLead } from "../../../redux/action/lead";
+import { FiFilter } from "react-icons/fi";
 import { PiFunnelLight, PiXLight } from "react-icons/pi";
-import { pakistanCities } from "../../../constant";
-import { DesktopDatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { countries, pakistanCities } from "../../../constant";
+import { DatePicker, DesktopDatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { countries } from "../../../constant";
+import { filterLeadReducer } from "../../../redux/reducer/lead";
+import { getEmployees } from "../../../redux/action/user";
+import { getProjects } from "../../../redux/action/project";
+import { CFormSelect } from "@coreui/react";
 
-const Filter = ({ open, setOpen }) => {
-
+const FilterDrawer = ({ open, setOpen, setIsFiltered }) => {
   //////////////////////////////// VARIABLES ///////////////////////////////////////////////////
+  const dispatch = useDispatch();
+  const { projects } = useSelector((state) => state.project);
+  const { employees } = useSelector((state) => state.user);
+  const { loggedUser } = useSelector((state) => state.user);
 
-  const initialFilterState = { city: '', startingDate: '', endingDate: '', status: '', priority: '', country: '', degree: '', visa: ''}
+  let role = loggedUser?.role;
+
+  const priorities = [
+    { name: "Very Cold", value: "veryCold" },
+    { name: "Cold", value: "cold" },
+    { name: "Moderate", value: "moderate" },
+    { name: "Hot", value: "hot" },
+    { name: "Very Hot", value: "veryHot" },
+  ];
+
+  const statuses = [
+    "newClient",
+    "followUp",
+    "contactedClient",
+    "callNotAttend",
+    "visitDone",
+    "visitSchedule",
+    "closedWon",
+    "closedLost",
+  ];
+  const sources = [
+    "Facebook",
+    "Instagram",
+    "Google",
+    "Facebook Comments",
+    "Friend and Family",
+    "Direct Call",
+    "Referral",
+  ];
+  const degrees = ["Bacholers", "Masters", "PHD", "Other"];
+  const visa = ["Student Visa", "Visit Visa"];
+  const initialFilterState = {
+    city: "",
+    startingDate: "",
+    endingDate: "",
+    status: "",
+    priority: "",
+    country: "",
+    degree: "",
+    visa: "",
+  };
+
+  const projectList = projects.map((project) => ({
+    name: project.title,
+    value: project._id,
+  }));
+
+  const employeeList = employees.map((employee) => ({
+    name: employee.firstName + " " + employee.lastName,
+    value: employee._id,
+  }));
+
   //////////////////////////////// STATES ///////////////////////////////////////////////////
-  const [filters, setFilters] = useState(initialFilterState)
+  const [filters, setFilters] = useState(initialFilterState);
 
   //////////////////////////////// USE EFFECTS ///////////////////////////////////////////////////
 
-  //////////////////////////////// FUNCTIONS ///////////////////////////////////////////////////
+  useEffect(() => {
+    dispatch(getProjects());
+    dispatch(getEmployees());
+  }, [open]);
 
+  //////////////////////////////// FUNCTIONS ///////////////////////////////////////////////////
+  const handleFilter = () => {
+    dispatch(filterLeadReducer(filters));
+    setIsFiltered(true);
+    setFilters(initialFilterState);
+    setOpen(false);
+  };
+
+  const handleChange = (field, value) => {
+    setFilters((pre) => ({ ...pre, [field]: value }));
+  };
 
   return (
     <Drawer anchor="right" open={open} onClose={() => setOpen(false)}>
@@ -38,22 +113,24 @@ const Filter = ({ open, setOpen }) => {
             disablePortal
             id="combo-box-demo"
             options={pakistanCities}
-            onSelect={(e) => handleChange('city', e.target.value)}
+            onSelect={(e) => handleChange("city", e.target.value)}
             className="w-full"
             renderInput={(params) => (
               <TextField {...params} autoComplete="false" fullWidth label="City" />
             )}
           />
-          {/* <Autocomplete
+          <Autocomplete
             size="small"
             disablePortal
             options={priorities}
             getOptionLabel={(option) => option.name} // Customize the displayed option
             getOptionSelected={(option, value) => option.value === value} // Compare by the 'value' property
-            onChange={(e, input) => handleChange('priority', input.value)} // Handle the selected value
+            onChange={(e, input) => handleChange("priority", input.value)} // Handle the selected value
             className="w-full"
-            renderInput={(params) => <TextField   {...params} autoComplete="false" label="Priority" fullWidth />}
-          /> */}
+            renderInput={(params) => (
+              <TextField {...params} autoComplete="false" label="Priority" fullWidth />
+            )}
+          />
 
           <div className="flex flex-col">
             <div>Date : </div>
@@ -87,58 +164,49 @@ const Filter = ({ open, setOpen }) => {
             size="small"
             disablePortal
             id="combo-box-demo"
-            options={countries.map((country) => country.name)}
-            onSelect={(e) => handleChange('country', e.target.value)}
-            className="w-full"
-            renderInput={(params) => (
-              <TextField {...params} autoComplete="false" fullWidth label="Country" />
-            )}
-          />
-          {/* <Autocomplete
-            size="small"
-            disablePortal
-            id="combo-box-demo"
-            options={degrees}
-            onSelect={(e) => handleChange('degree', e.target.value)}
-            className="w-full"
-            renderInput={(params) => (
-              <TextField {...params} autoComplete="false" fullWidth label="Degree" />
-            )}
-          /> */}
-          {/* <Autocomplete
-            size="small"
-            disablePortal
-            id="combo-box-demo"
-            options={visa}
-            onSelect={(e) => handleChange('visa', e.target.value)}
-            className="w-full"
-            renderInput={(params) => (
-              <TextField {...params} autoComplete="false" fullWidth label="Visa" />
-            )}
-          /> */}
-          {/* <Autocomplete
-            size="small"
-            disablePortal
-            id="combo-box-demo"
             options={statuses}
-            onSelect={(e) => handleChange('status', e.target.value)}
+            onSelect={(e) => handleChange("status", e.target.value)}
             className="w-full"
             renderInput={(params) => (
               <TextField {...params} autoComplete="false" fullWidth label="Status" />
             )}
-          /> */}
-{/* 
+          />
+
           <Autocomplete
             size="small"
             disablePortal
             id="combo-box-demo"
             options={sources}
-            onSelect={(e) => handleChange('source', e.target.value)}
+            onSelect={(e) => handleChange("source", e.target.value)}
             className="w-full"
             renderInput={(params) => (
               <TextField {...params} autoComplete="false" fullWidth label="Source" />
             )}
-          /> */}
+          />
+
+          <Autocomplete
+            size="small"
+            disablePortal
+            id="combo-box-demo"
+            options={projectList}
+            getOptionLabel={(option) => option.name}
+            onChange={(e, value) => handleChange("property", value?.value)}
+            className="w-full"
+            renderInput={(params) => <TextField {...params} label="Project" />}
+          />
+
+          {role == "super_admin" && (
+            <Autocomplete
+              size="small"
+              disablePortal
+              id="combo-box-demo"
+              options={employeeList}
+              getOptionLabel={(option) => option.name}
+              onChange={(e, value) => handleChange("allocatedTo", value?.value)}
+              className="w-full"
+              renderInput={(params) => <TextField {...params} label="Employee" />}
+            />
+          )}
 
           <div className="flex gap-4 justify-end">
             <button className="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded-lg font-primary">
@@ -146,6 +214,7 @@ const Filter = ({ open, setOpen }) => {
             </button>
             <button
               className="bg-red-400 hover:bg-red-500 text-white px-4 py-2 rounded-lg font-primary"
+              onClick={handleFilter}
               autoFocus>
               Apply Filters
             </button>
@@ -156,4 +225,4 @@ const Filter = ({ open, setOpen }) => {
   );
 };
 
-export default Filter;
+export default FilterDrawer;

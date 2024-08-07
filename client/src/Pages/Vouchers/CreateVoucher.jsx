@@ -83,24 +83,10 @@ const CreateVoucher = ({ open, setOpen, scroll, downloadPdf, loader }) => {
       remained,
       major,
     } = voucherData;
-    // if (
-    //   !visa ||
-    //   !degree ||
-    //   !issuingDate ||
-    //   !dueDate ||
-    //   !clientName ||
-    //   !phone ||
-    //   !type ||
-    //   !country ||
-    //   !total ||
-    //   !paid ||
-    //   !remained ||
-    //   !major ||
-    //   !note
-    // )
-    //   return alert("Make sure to provide all the fields");
 
     dispatch(createVoucher(voucherData, setOpen, projects));
+
+    setVoucherData(initialVoucherState);
   };
 
   const handleClose = () => {

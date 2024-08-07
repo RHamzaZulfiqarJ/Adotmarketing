@@ -13,12 +13,16 @@ import { DeleteOutline } from "@mui/icons-material";
 import EnterPassword from "./EnterPassword";
 import { getRefunds } from "../../../redux/action/refund";
 import { getRefundsReducer } from "../../../redux/reducer/refund";
+import { PiTrashLight } from "react-icons/pi";
+import DeleteModal from "./DeleteModal";
 
 function RefundApprovals() {
   ////////////////////////////////////// VARIABLES //////////////////////////////
   const dispatch = useDispatch();
-  const { refunds, allRefunds, isFetching, error } = useSelector(state => state.refund);
-  const { error: cashbookError, isFetching: cashbookIsFetching } = useSelector(state => state.cashbook);
+  const { refunds, allRefunds, isFetching, error } = useSelector((state) => state.refund);
+  const { error: cashbookError, isFetching: cashbookIsFetching } = useSelector(
+    (state) => state.cashbook
+  );
   const columns = [
     {
       field: "uid",
@@ -32,7 +36,9 @@ function RefundApprovals() {
       headerName: "Issuing Date",
       headerClassName: "super-app-theme--header",
       width: 140,
-      renderCell: (params) => <div className="font-primary font-light">{format(params.row.createdAt)}</div>,
+      renderCell: (params) => (
+        <div className="font-primary font-light">{format(params.row.createdAt)}</div>
+      ),
     },
     {
       field: "amount",
@@ -46,7 +52,9 @@ function RefundApprovals() {
       headerName: "Client Name",
       headerClassName: "super-app-theme--header",
       width: 160,
-      renderCell: (params) => <div className="font-primary font-light">{params.row.clientName}</div>,
+      renderCell: (params) => (
+        <div className="font-primary font-light">{params.row.clientName}</div>
+      ),
     },
     {
       field: "branch",
@@ -74,18 +82,27 @@ function RefundApprovals() {
       headerName: "Status",
       headerClassName: "super-app-theme--header",
       width: 150,
-      renderCell: (params) => <div className={`font-primary font-light border-[1px] p-2 rounded-[3rem]
-      ${params.row.status == 'accepted' && 'border-green-400 text-green-400'}
-      ${params.row.status == 'rejected' && 'border-red-400 text-red-400'}
-      ${params.row.status == 'underProcess' && 'border-amber-400 text-amber-400'}
-      `}>{params.row.status}</div>,
+      renderCell: (params) => (
+        <div
+          className={`font-primary font-light border-[1px] p-2 rounded-[3rem]
+      ${params.row.status == "accepted" && "border-green-400 text-green-400"}
+      ${params.row.status == "rejected" && "border-red-400 text-red-400"}
+      ${params.row.status == "underProcess" && "border-amber-400 text-amber-400"}
+      `}>
+          {params.row.status}
+        </div>
+      ),
     },
     {
       field: "reason",
       headerName: "Reason",
       headerClassName: "super-app-theme--header",
       width: 250,
-      renderCell: (params) => <Tooltip title={params.row.reason}><div className="font-primary font-light">{params.row.reason}</div></Tooltip>,
+      renderCell: (params) => (
+        <Tooltip title={params.row.reason}>
+          <div className="font-primary font-light">{params.row.reason}</div>
+        </Tooltip>
+      ),
     },
     {
       field: "approve/reject",
@@ -94,26 +111,53 @@ function RefundApprovals() {
       width: 150,
       renderCell: (params) => (
         <div className="flex gap-[4px] ">
-          <button
-            onClick={() => { setSelectedRefund(params.row); setOpenEnterPassword(true); setRefundType('approve') }}
-            className="cursor-pointer bg-green-700 text-white px-[8px] py-[2px] rounded-[12px] text-[14x] ">
+          {params.row.status.toLowerCase() == "underprocess" ? (
+            <>
+              <button
+            onClick={() => {
+              setSelectedRefund(params.row);
+              setOpenEnterPassword(true);
+              setRefundType("approve");
+            }}
+            className="border-[1px] px-[8px] py-[4px] rounded-full capitalize font-primary font-medium text-[14x] border-green-500 text-green-500 hover:bg-green-500 hover:text-white transition-all duration-300">
             Approve
           </button>
           <button
-            onClick={() => { setSelectedRefund(params.row); setOpenEnterPassword(true); setRefundType('reject') }}
-            className="cursor-pointer bg-red-700 text-white px-[8px] py-[2px] rounded-[12px] text-[14x] ">
+            onClick={() => {
+              setSelectedRefund(params.row);
+              setOpenEnterPassword(true);
+              setRefundType("reject");
+            }}
+            className="border-[1px] px-[8px] py-[4px] rounded-full capitalize font-primary font-medium text-[14x] border-red-400 text-red-400 hover:bg-red-500 hover:text-white transition-all duration-300">
             Reject
           </button>
+            </>
+          ) : (
+            <Tooltip placement="top" title="Delete">
+              {" "}
+              <PiTrashLight
+                onClick={() => {
+                  setOpenDeleteModal(true);
+                  setSelectedApproval(params.row?._id);
+                }}
+                className="cursor-pointer text-red-500 text-[23px] hover:text-red-400"
+              />
+            </Tooltip>
+          )}
+          
         </div>
       ),
     },
   ];
 
   ////////////////////////////////////// STATES //////////////////////////////
-  const [selectedRefund, setSelectedRefund] = useState('')
-  const [openEnterPassword, setOpenEnterPassword] = useState(false)
-  const [refundType, setRefundType] = useState('') // approve/reject
-  const [isFiltered, setIsFiltered] = useState(false)
+  const [selectedRefund, setSelectedRefund] = useState("");
+  const [openEnterPassword, setOpenEnterPassword] = useState(false);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [selectedApproval, setSelectedApproval] = useState("");
+  const [refundType, setRefundType] = useState(""); // approve/reject
+  const [isFiltered, setIsFiltered] = useState(false);
+  const [search, setSearch] = useState("");
 
   ////////////////////////////////////// USE EFFECTS //////////////////////////////
   useEffect(() => {
@@ -121,19 +165,32 @@ function RefundApprovals() {
   }, []);
   useEffect(() => {
     if (!isFiltered) {
-      dispatch(getRefundsReducer(allRefunds))
+      dispatch(getRefundsReducer(allRefunds));
     }
-  }, [isFiltered])
+  }, [isFiltered]);
 
   ////////////////////////////////////// FUNCTION //////////////////////////////
 
-
-
   return (
-    <div className="w-full h-fit bg-inherit flex flex-col gap-[2rem] font-primary">
-      <EnterPassword open={openEnterPassword} setOpen={setOpenEnterPassword} refund={selectedRefund} type={refundType} />
+    <div className="w-full h-fit bg-inherit flex flex-col font-primary">
+      <EnterPassword
+        open={openEnterPassword}
+        setOpen={setOpenEnterPassword}
+        refund={selectedRefund}
+        type={refundType}
+      />
 
-      <Topbar isFiltered={isFiltered} setIsFiltered={setIsFiltered} />
+      <Topbar
+        isFiltered={isFiltered}
+        setIsFiltered={setIsFiltered}
+        search={search}
+        setSearch={setSearch}
+      />
+      <DeleteModal 
+        open={openDeleteModal} 
+        setOpen={setOpenDeleteModal} 
+        approvalId={selectedApproval}
+       />
       <Table
         rows={refunds}
         columns={columns}

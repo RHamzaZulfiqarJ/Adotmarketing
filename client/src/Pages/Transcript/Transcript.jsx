@@ -121,7 +121,7 @@ const Transcript = () => {
   //////////////////////////////// USE STATE /////////////////////////////////
   const [selectedRowId, setSelectedRowId] = React.useState(null);
   const [openDeleteModal, setOpenDeleteModal] = React.useState(false);
-
+  const [search, setSearch] = React.useState("");
   ///////////////////////////////// USE EFFECT ////////////////////////////////
 
   useEffect(() => {
@@ -140,6 +140,13 @@ const Transcript = () => {
     navigate("/download/transcript");
   };
 
+  const filteredTranscripts = transcripts.filter((transcript) => 
+    transcript.employeeName.toLowerCase().includes(search.toLowerCase()) ||
+    transcript.uid.toLowerCase().includes(search.toLowerCase()) ||
+    transcript.designation.toLowerCase().includes(search.toLowerCase()) ||
+    transcript.phone.toLowerCase().includes(search.toLowerCase())
+  );
+
   return (
     <div className="w-full">
       <DeleteTranscript
@@ -147,10 +154,10 @@ const Transcript = () => {
         setOpen={setOpenDeleteModal}
         transcriptId={selectedRowId}
       />
-      <Topbar />
+      <Topbar search={search} setSearch={setSearch} />
 
       <Table
-        rows={transcripts}
+        rows={filteredTranscripts}
         columns={columns}
         isFetching={isFetching}
         error={error}
