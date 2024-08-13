@@ -50,16 +50,7 @@ const AllFollowUpsTable = () => {
     return createData(stat.date, DAYS[date.getDay()], stat.followUps);
   });
 
-  const currentDate = new Date();
-  const sortedRow = rows
-    // .filter((item) => moment(item.date, "DD/MM/YYYY").isSameOrBefore(currentDate, "day")) // Filter out dates greater than current date
-    .sort((a, b) => moment(a.date, "DD/MM/YYYY").diff(moment(b.date, "DD/MM/YYYY"))) // Sort by date
-    .reverse(); // Reverse the order so that latest date comes first
-
-  // const sortedRow = rows
-  // .filter(item => new Date(item.date) <= currentDate) // Filter out dates greater than current date
-  // .sort((a, b) => new Date(a.date) - new Date(b.date)) // Sort by date
-  // .reverse()  // Reverse the order so that latest date comes first
+  const sortedRow = rows.reverse();
 
   const columns = [
     {

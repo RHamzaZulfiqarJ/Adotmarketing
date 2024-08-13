@@ -354,9 +354,6 @@ function Leads({ type, showSidebar }) {
     setFilteredLeads(updatedLeads);
   }, [search, leads, options.showArchivedLeads]);
 
-  const archivedLeads = filteredLeads.filter((lead) => lead.isArchived);
-  const unarchivedLeads = filteredLeads.filter((lead) => !lead.isArchived);
-
   ////////////////////////////////////// FUNCTION //////////////////////////////
   const handleArchive = (lead) => {
     dispatch(updateLead(lead._id, { isArchived: true }, { loading: false }))
@@ -402,6 +399,10 @@ function Leads({ type, showSidebar }) {
       navigate(`/leads/refund/${lead._id}`);
     }
   };
+
+  if(error == "Request failed with status code 400") {
+    alert("Phone Number Already Exists")
+  }
 
   return (
     <div className="w-full h-fit bg-inherit flex flex-col">

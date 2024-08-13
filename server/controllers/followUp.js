@@ -119,36 +119,41 @@ export const getFollowUpsStats = async (req, res, next) => {
         // Remove follow-ups with null leadId (filtered out because of isArchived: false)
         const validFollowUps = followUps.filter(followUp => followUp.leadId !== null);
 
+        // Get the latest follow-up for each lead
         const latestFollowUpsByLead = validFollowUps.reduce((result, followUp) => {
-            const leadId = followUp.leadId?._id.toString();
-            
+            const leadId = followUp.leadId._id.toString();
             if (!result[leadId] || new Date(followUp.followUpDate) > new Date(result[leadId].followUpDate)) {
                 result[leadId] = followUp;
             }
-            
             return result;
         }, {});
 
         const latestFollowUpsArray = Object.values(latestFollowUpsByLead);
 
+        // Group by follow-up date
         const groupedByDate = latestFollowUpsArray.reduce((result, followUp) => {
             const followUpDate = new Date(followUp.followUpDate).toLocaleDateString();
 
-            let existingDateGroup = result.find(item => item.date === followUpDate);
-            if (!existingDateGroup) {
-                existingDateGroup = { date: followUpDate, followUps: [] };
-                result.push(existingDateGroup);
+            if (!result[followUpDate]) {
+                result[followUpDate] = [];
             }
 
-            existingDateGroup.followUps.push(followUp);
+            result[followUpDate].push(followUp);
             return result;
-        }, []);
+        }, {});
 
-        res.status(200).json({ result: groupedByDate, message: "Stats fetched successfully.", success: true });
+        // Convert grouped object to an array of objects with date and followUps array
+        const responseArray = Object.keys(groupedByDate).map(date => ({
+            date,
+            followUps: groupedByDate[date]
+        }));
+
+        res.status(200).json({ result: responseArray, message: "Stats fetched successfully.", success: true });
     } catch (error) {
         next(createError(500, error.message));
     }
 }
+
 
 export const createFollowUp = async (req, res, next) => {
     try {
