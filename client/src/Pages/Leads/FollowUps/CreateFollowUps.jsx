@@ -19,6 +19,7 @@ import {
 import { PiNotepad, PiXLight } from "react-icons/pi";
 import { createFollowUp } from "../../../redux/action/followUp";
 import { CFormSelect } from "@coreui/react";
+import { updateLead } from "../../../redux/api";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="down" ref={ref} {...props} />;
@@ -67,9 +68,18 @@ const CreateFollowUps = ({ setOpen, open, scroll }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(createFollowUp(followUpData))
-    setFollowUpData(initialFollowUpState);
-    setOpen(false);
+    try {
+      dispatch(createFollowUp(followUpData))
+      if (followUpData.status === "closedLost") {
+        dispatch(updateLead(leadId, { isArchived: true }, { loading: false }))
+      }
+      setFollowUpData(initialFollowUpState);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setOpen(false);
+      navigate('/leads/call-reminders')
+    }
   };
 
   const handleClose = () => {
@@ -80,6 +90,7 @@ const CreateFollowUps = ({ setOpen, open, scroll }) => {
     });
 
     setOpen(false);
+
   };
 
   return (

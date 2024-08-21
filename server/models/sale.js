@@ -3,11 +3,14 @@ import { generateUniqueIdentifier } from '../utils/utils.js'
 
 const saleSchema = Schema({
     leadId: { type: Schema.Types.ObjectId, ref: 'Lead', required: false },
-    clientName: { type: String, required: true },
-    net: { type: String, required: true },
-    received: { type: String, required: true },
-    top: { type: String, required: true },
-    staff: { type: String, required: true },
+    staff: { type: String, required: false },
+    clientName: { type: String, required: false },
+    project: { type: Schema.Types.ObjectId, ref: 'Project', required: false },
+    propertyType: { type: String, required: false },
+    totalAmount: { type: Number, required: false },
+    receivedAmount: { type: Number, required: false },
+    buyingPrice: { type: Number, required: false },
+    profit: { type: Number, required: false },
     uid: { type: String },
 }, { timestamps: true })
 

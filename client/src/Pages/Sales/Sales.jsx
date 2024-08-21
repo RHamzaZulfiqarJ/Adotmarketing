@@ -26,25 +26,60 @@ function Sales() {
       headerClassName: "super-app-theme--header",
       renderCell: (params) => (
         <Tooltip title={""}>
-          <span className="font-primary capitalize">{params.row.uid}</span>
+          <span className="font-primary capitalize">{params.row?.uid}</span>
         </Tooltip>
+      ),
+    },
+    {
+      field: "staff",
+      headerClassName: "super-app-theme--header",
+      headerName: "Staff",
+      width: 120,
+      renderCell: (params) => (
+        <div className="font-primary capitalize">{params.row?.staff}</div>
       ),
     },
     {
       field: "clientName",
       headerClassName: "super-app-theme--header",
       headerName: "Client Name",
+      width: 130,
+      renderCell: (params) => <div className="font-primary">{params.row?.clientName}</div>,
+    },
+    {
+      field: "project",
+      headerClassName: "super-app-theme--header",
+      headerName: "Project",
       width: 150,
-      renderCell: (params) => (
-        <div className="font-primary capitalize">{params.row.clientName}</div>
-      ),
+      renderCell: (params) => <div className="font-primary">{params.row?.project?.title}</div>,
+    },
+    {
+      field: "totalAmount",
+      headerClassName: "super-app-theme--header",
+      headerName: "Total",
+      width: 110,
+      renderCell: (params) => <div className="font-primary">Rs. {params.row?.totalAmount}</div>,
+    },
+    {
+      field: "buyingPrice",
+      headerClassName: "super-app-theme--header",
+      headerName: "Buying Price",
+      width: 150,
+      renderCell: (params) => <div className="font-primary">Rs. {params.row?.buyingPrice}</div>,
+    },
+    {
+      field: "receivedAmount",
+      headerClassName: "super-app-theme--header",
+      headerName: "Received",
+      width: 110,
+      renderCell: (params) => <div className="font-primary">Rs. {params.row?.receivedAmount}</div>,
     },
     {
       field: "profit",
       headerClassName: "super-app-theme--header",
       headerName: "Profit",
-      width: 150,
-      renderCell: (params) => <div className="font-primary">{params.row.net - params.row.received}</div>,
+      width: 110,
+      renderCell: (params) => <div className="font-primary">Rs. {params.row?.profit}</div>,
     },
     {
       field: "createdAt",
@@ -54,28 +89,6 @@ function Sales() {
       renderCell: (params) => (
         <div className="font-primary">{moment(params.row?.createdAt).format("DD-MM-YYYY")}</div>
       ),
-    },
-    {
-      field: "net",
-      headerClassName: "super-app-theme--header",
-      headerName: "Net Worth",
-      width: 140,
-      renderCell: (params) => <div className="font-primary">{(params.row.net).toLocaleString()}</div>,
-    },
-    {
-      field: "received",
-      headerClassName: "super-app-theme--header",
-      headerName: "Amount Received",
-      width: 200,
-      renderCell: (params) => <div className="font-primary">{params.row.received}</div>,
-    },
-
-    {
-      field: "top",
-      headerClassName: "super-app-theme--header",
-      headerName: "Type of Payment",
-      width: 200,
-      renderCell: (params) => <div className="font-primary">{params.row.top}</div>,
     },
     {
       field: "action",

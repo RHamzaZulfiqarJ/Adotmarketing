@@ -72,8 +72,6 @@ export const getEmployeeLeads = async (req, res, next) => {
     }
 };
 
-
-
 const priorities = [
     { name: "Very Hot", value: 'veryHot' },
     { name: "Hot", value: 'hot' },

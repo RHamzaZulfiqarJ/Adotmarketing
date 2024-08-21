@@ -15,6 +15,7 @@ import { PiNotepad, PiXLight } from "react-icons/pi";
 import { getClients, getEmployees } from "../../redux/action/user";
 import { getLeadReducer } from "../../redux/reducer/lead";
 import { CFormSelect } from "@coreui/react";
+import { getProjects } from "../../redux/action/project";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="down" ref={ref} {...props} />;
@@ -26,14 +27,17 @@ const CreateSale = ({ open, setOpen, scroll }) => {
   const navigate = useNavigate();
   const { isFetching } = useSelector((state) => state.sale);
   const { currentLead: lead } = useSelector((state) => state.lead);
-  const { employees, clients } = useSelector((state) => state.user);
+  const { employees } = useSelector((state) => state.user);
+  const { projects } = useSelector((state) => state.project);
   const initialState = {
     staff: "",
     clientName: "",
-    net: "",
-    received: "",
-    profit: "",
-    top: "",
+    project: "",
+    propertyType: "",
+    totalAmount: 0,
+    receivedAmount: 0,
+    buyingPrice: 0,
+    profit: 0,
   };
   ////////////////////////////////////////// STATES /////////////////////////////////////
   const [saleData, setSaleData] = useState(initialState);
@@ -43,11 +47,16 @@ const CreateSale = ({ open, setOpen, scroll }) => {
     if (employees.length === 0) {
       dispatch(getEmployees());
     }
-        dispatch(getClients());
+    dispatch(getClients());
   }, [open]);
+
   useEffect(() => {
     setSaleData({ ...saleData, staff: lead?.client?.username });
   }, [lead]);
+
+  useEffect(() => {
+    getProjects();
+  }, []);
 
   ////////////////////////////////////////// FUNCTIONS ///////////////////////////////////
   const handleSubmit = (e) => {
@@ -119,12 +128,45 @@ const CreateSale = ({ open, setOpen, scroll }) => {
                 </td>
               </tr>
               <tr>
-                <td className="pb-4 text-lg">Net Price </td>
+                <td className="pb-4 text-lg">Project </td>
+                <td className="pb-4">
+                  <CFormSelect
+                    value={saleData.project}
+                    onChange={(e) => handleChange("project", e.target.value)}
+                    className="border-[1px] p-2 rounded-md w-full border-[#c1c1c1] cursor-pointer text-black">
+                    <option value="">Select an Option</option>
+                    {projects.map((project, key) => (
+                      <option key={project?._id} value={project?._id}>
+                        {project?.title}
+                      </option>
+                    ))}
+                  </CFormSelect>
+                </td>
+              </tr>
+              <tr>
+                <td className="pb-4 text-lg">Porperty Type </td>
+                <td className="pb-4">
+                  <CFormSelect
+                    value={saleData.propertyType}
+                    onChange={(e) => handleChange("propertyType", e.target.value)}
+                    className="border-[1px] p-2 rounded-md w-full border-[#c1c1c1] cursor-pointer text-black"
+                  >
+                    <option value={""}>None</option>
+                    <option value={"residential"}>Residential</option>
+                    <option value={"commercial"}>Commercial</option>
+                    <option value={"industrial"}>Industrial</option>
+                    <option value={"agricultural"}>Agricultural</option>
+                    <option value={"other"}>Other</option>
+                  </CFormSelect>
+                </td>
+              </tr>
+              <tr>
+                <td className="pb-4 text-lg">Total Amount </td>
                 <td className="pb-4">
                   <TextField
-                    onChange={(e) => handleChange("net", e.target.value)}
-                    value={saleData.net}
-                    name="net"
+                    onChange={(e) => handleChange("totalAmount", e.target.value)}
+                    value={saleData.totalAmount}
+                    name="totalAmount"
                     size="small"
                     type="number"
                     fullWidth
@@ -132,12 +174,26 @@ const CreateSale = ({ open, setOpen, scroll }) => {
                 </td>
               </tr>
               <tr>
-                <td className="pb-4 text-lg">Recieved </td>
+                <td className="pb-4 text-lg">Buying Amount </td>
                 <td className="pb-4">
                   <TextField
-                    onChange={(e) => handleChange("received", e.target.value)}
-                    value={saleData.received}
-                    name="received"
+                    onChange={(e) => handleChange("buyingPrice", e.target.value)}
+                    value={saleData.buyingPrice}
+                    name="buyingPrice"
+                    type="number"
+                    size="small"
+                    fullWidth
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td className="pb-4 text-lg">Recieved Amount </td>
+                <td className="pb-4">
+                  <TextField
+                    onChange={(e) => handleChange("receivedAmount", e.target.value)}
+                    value={saleData.receivedAmount}
+                    name="receivedAmount"
+                    type="number"
                     size="small"
                     fullWidth
                   />
@@ -147,29 +203,14 @@ const CreateSale = ({ open, setOpen, scroll }) => {
                 <td className="pb-4 text-lg">Profit </td>
                 <td className="pb-4">
                   <TextField
-                    onChange={handleChange}
-                    value={saleData.received - saleData.net}
+                    onChange={(e) => handleChange("profit", e.target.value)}
+                    value={saleData.profit = saleData.buyingPrice - saleData.totalAmount}
                     name="profit"
                     size="small"
                     type="number"
                     disabled
                     fullWidth
                   />
-                </td>
-              </tr>
-              <tr>
-                <td className="pb-4 text-lg">Type of Payment </td>
-                <td className="pb-4">
-                  <CFormSelect
-                    value={saleData.top}
-                    onChange={(e) => handleChange("top", e.target.value)}
-                    className="border-[1px] p-2 rounded-md w-full border-[#c1c1c1] cursor-pointer text-black"
-                  >
-                    <option value={""}>Select an Option</option>
-                    <option value={"card"}>Card</option>
-                    <option value={"cash"}>Cash</option>
-                    <option value={"cheque"}>Cheque</option>
-                  </CFormSelect>
                 </td>
               </tr>
             </table>

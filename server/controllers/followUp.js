@@ -2,6 +2,7 @@ import mongoose from 'mongoose'
 import FollowUp from '../models/followUp.js'
 import { createError } from '../utils/error.js'
 import Lead from '../models/lead.js'
+import { parse, format } from 'date-fns';
 
 export const getFollowUp = async (req, res, next) => {
     try {
@@ -56,6 +57,7 @@ export const getEmployeeFollowUps = async (req, res, next) => {
 
 export const getEmployeeFollowUpsStats = async (req, res, next) => {
     try {
+        // Fetch all follow-ups and populate the related leadId, client, property, and allocatedTo
         const allFollowUps = await FollowUp.find()
             .populate({
                 path: 'leadId',
@@ -68,36 +70,69 @@ export const getEmployeeFollowUpsStats = async (req, res, next) => {
             })
             .exec();
 
+        // Filter follow-ups by checking if the logged-in user is in the allocatedTo field
         const filteredFollowUps = allFollowUps.filter(followUp =>
             followUp.leadId?.allocatedTo.some(emp => emp._id.toString() === req.user?._id.toString())
         );
 
+        // Get the current date
+        const currentDate = new Date();
+
+        // Normalize dates, filter out empty strings and future dates, and keep only the latest follow-up for each lead
         const latestFollowUpsByLead = filteredFollowUps.reduce((result, followUp) => {
+            if (!followUp.followUpDate || followUp.followUpDate.trim() === '') {
+                return result; // Exclude empty string dates
+            }
+
+            let normalizedDate;
+            try {
+                // Attempt to parse various date formats
+                const parsedDate = parse(followUp.followUpDate, 'd-M-yy', new Date()) || new Date(followUp.followUpDate);
+                normalizedDate = format(parsedDate, 'yyyy-MM-dd');
+            } catch {
+                normalizedDate = followUp.followUpDate; // Default to original if parsing fails
+            }
+
+            followUp.followUpDate = normalizedDate;
+
+            // Exclude follow-ups with dates greater than the current date
+            if (new Date(normalizedDate) > currentDate) {
+                return result;
+            }
+
             const leadId = followUp.leadId?._id.toString();
-            
             if (!result[leadId] || new Date(followUp.followUpDate) > new Date(result[leadId].followUpDate)) {
                 result[leadId] = followUp;
             }
-            
             return result;
         }, {});
 
+        // Convert the object to an array of follow-ups
         const latestFollowUpsArray = Object.values(latestFollowUpsByLead);
 
-        const groupedByDate = latestFollowUpsArray.reduce((result, followUp) => {
-            const followUpDate = new Date(followUp.followUpDate).toLocaleDateString();
+        // Sort follow-ups by followUpDate in ascending order
+        latestFollowUpsArray.sort((a, b) => new Date(a.followUpDate) - new Date(b.followUpDate));
 
-            let existingDateGroup = result.find(item => item.date === followUpDate);
-            if (!existingDateGroup) {
-                existingDateGroup = { date: followUpDate, followUps: [] };
-                result.push(existingDateGroup);
+        // Group the latest follow-ups by date for the final stats
+        const groupedByDate = latestFollowUpsArray.reduce((result, followUp) => {
+            const followUpDate = followUp.followUpDate; // Using normalized date directly
+
+            if (!result[followUpDate]) {
+                result[followUpDate] = [];
             }
 
-            existingDateGroup.followUps.push(followUp);
+            result[followUpDate].push(followUp);
             return result;
-        }, []);
+        }, {});
 
-        res.status(200).json({ result: groupedByDate, message: "Stats fetched successfully.", success: true });
+        // Convert grouped object to an array of objects with date and followUps array
+        const responseArray = Object.keys(groupedByDate).map(date => ({
+            date,
+            followUps: groupedByDate[date]
+        }));
+
+        // Respond with the final grouped data
+        res.status(200).json({ result: responseArray, message: "Stats fetched successfully.", success: true });
     } catch (err) {
         next(createError(500, err.message));
     }
@@ -119,8 +154,36 @@ export const getFollowUpsStats = async (req, res, next) => {
         // Remove follow-ups with null leadId (filtered out because of isArchived: false)
         const validFollowUps = followUps.filter(followUp => followUp.leadId !== null);
 
+        // Get current date
+        const currentDate = new Date();
+
+        // Normalize dates, filter out empty strings, and exclude dates greater than the current date
+        const normalizedFollowUps = validFollowUps.map(followUp => {
+            if (!followUp.followUpDate || followUp.followUpDate.trim() === '') {
+                return null; // Exclude empty string dates
+            }
+
+            let normalizedDate;
+            try {
+                // Attempt to parse various date formats
+                const parsedDate = parse(followUp.followUpDate, 'd-M-yy', new Date()) || new Date(followUp.followUpDate);
+                normalizedDate = format(parsedDate, 'yyyy-MM-dd');
+            } catch {
+                normalizedDate = followUp.followUpDate; // Default to original if parsing fails
+            }
+
+            followUp.followUpDate = normalizedDate;
+
+            // Exclude follow-ups with dates greater than the current date
+            if (new Date(normalizedDate) > currentDate) {
+                return null;
+            }
+
+            return followUp;
+        }).filter(followUp => followUp !== null); // Filter out nulls from invalid dates or future dates
+
         // Get the latest follow-up for each lead
-        const latestFollowUpsByLead = validFollowUps.reduce((result, followUp) => {
+        const latestFollowUpsByLead = normalizedFollowUps.reduce((result, followUp) => {
             const leadId = followUp.leadId._id.toString();
             if (!result[leadId] || new Date(followUp.followUpDate) > new Date(result[leadId].followUpDate)) {
                 result[leadId] = followUp;
@@ -130,9 +193,12 @@ export const getFollowUpsStats = async (req, res, next) => {
 
         const latestFollowUpsArray = Object.values(latestFollowUpsByLead);
 
-        // Group by follow-up date
+        // Sort follow-ups by followUpDate in ascending order
+        latestFollowUpsArray.sort((a, b) => new Date(a.followUpDate) - new Date(b.followUpDate));
+
+        // Group by follow-up date using the format YYYY-MM-DD directly
         const groupedByDate = latestFollowUpsArray.reduce((result, followUp) => {
-            const followUpDate = new Date(followUp.followUpDate).toLocaleDateString();
+            const followUpDate = followUp.followUpDate; // Using date string directly
 
             if (!result[followUpDate]) {
                 result[followUpDate] = [];
@@ -153,7 +219,6 @@ export const getFollowUpsStats = async (req, res, next) => {
         next(createError(500, error.message));
     }
 }
-
 
 export const createFollowUp = async (req, res, next) => {
     try {

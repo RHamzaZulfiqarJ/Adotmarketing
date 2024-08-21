@@ -42,7 +42,7 @@ const FollowUps = () => {
             {params.row?.status == "closedWon" ? <div>Closed Won</div> : <div></div>}
             {params.row?.status == "closedLost" ? <div>Closed Lost</div> : <div></div>}
             {params.row?.status == "followUp" ? <div>Follow Up</div> : <div></div>}
-            {params.row?.status == "ContactedClient" ? <div>Contacted Client</div> : <div></div>}
+            {params.row?.status == "contactedClient" ? <div>Contacted Client</div> : <div></div>}
             {params.row?.status == "callNotAttend" ? <div>Call Not Attend</div> : <div></div>}
             {params.row?.status == "visitSchedule" ? <div>Visit Schedule</div> : <div></div>}
             {params.row?.status == "visitDone" ? <div>Visit Done</div> : <div></div>}

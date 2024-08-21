@@ -10,6 +10,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { getLeadSales } from "../../../redux/action/sale";
 import { getLeadCashbooks } from "../../../redux/action/cashbook";
 import { getLead } from "../../../redux/action/lead";
+import moment from "moment";
 
 const Ledger = () => {
   /////////////////////////////////////////// VARIABLES ////////////////////////////////////////////
@@ -32,67 +33,73 @@ const Ledger = () => {
     {
       field: "uid",
       headerName: "ID",
-      headerClassName: "super-app-theme--header",
       width: 70,
-      renderCell: (params) => {
-        <div className="font-primary">{params.row.uid}</div>;
-      },
+      headerClassName: "super-app-theme--header",
+      renderCell: (params) => (
+        <Tooltip title={""}>
+          <span className="font-primary capitalize">{params.row?.uid}</span>
+        </Tooltip>
+      ),
     },
     {
       field: "staff",
-      headerName: "Staff",
       headerClassName: "super-app-theme--header",
+      headerName: "Staff",
       width: 120,
-      renderCell: (params) => {
-        <Tooltip >
-          <div className="font-primary capitalize">{params.row.staff}</div>
-        </Tooltip>;
-      },
+      renderCell: (params) => (
+        <div className="font-primary capitalize">{params.row?.staff}</div>
+      ),
     },
     {
       field: "clientName",
+      headerClassName: "super-app-theme--header",
       headerName: "Client Name",
-      headerClassName: "super-app-theme--header",
-      width: 170,
-      renderCell: (params) => {
-        <div className="font-primary">{params.row.clientName}</div>;
-      },
+      width: 130,
+      renderCell: (params) => <div className="font-primary">{params.row?.clientName}</div>,
     },
     {
-      field: "net",
-      headerName: "Net Worth",
+      field: "project",
       headerClassName: "super-app-theme--header",
-      width: 140,
-      renderCell: (params) => {
-        <div className="font-primary">{params.row.net}</div>;
-      },
+      headerName: "Project",
+      width: 150,
+      renderCell: (params) => <div className="font-primary">{params.row?.project?.title}</div>,
     },
     {
-      field: "received",
-      headerName: "Amount Recieved",
+      field: "totalAmount",
       headerClassName: "super-app-theme--header",
-      width: 200,
-      renderCell: (params) => {
-        <div className="font-primary">{params.row.received}</div>;
-      },
+      headerName: "Total",
+      width: 110,
+      renderCell: (params) => <div className="font-primary">Rs. {params.row?.totalAmount}</div>,
     },
     {
-      field: "net",
+      field: "buyingPrice",
+      headerClassName: "super-app-theme--header",
+      headerName: "Buying Price",
+      width: 150,
+      renderCell: (params) => <div className="font-primary">Rs. {params.row?.buyingPrice}</div>,
+    },
+    {
+      field: "receivedAmount",
+      headerClassName: "super-app-theme--header",
+      headerName: "Received",
+      width: 110,
+      renderCell: (params) => <div className="font-primary">Rs. {params.row?.receivedAmount}</div>,
+    },
+    {
+      field: "profit",
+      headerClassName: "super-app-theme--header",
       headerName: "Profit",
-      headerClassName: "super-app-theme--header",
-      width: 140,
-      renderCell: (params) => {
-        <div className="font-primary">{params.row.net - params.row.received}</div>;
-      },
+      width: 110,
+      renderCell: (params) => <div className="font-primary">Rs. {params.row?.profit}</div>,
     },
     {
-      field: "top",
-      headerName: "Type of Payment",
+      field: "createdAt",
       headerClassName: "super-app-theme--header",
-      width: 200,
-      renderCell: (params) => {
-        <div className="font-primary">{params.row.top}</div>;
-      },
+      headerName: "Created At",
+      width: 150,
+      renderCell: (params) => (
+        <div className="font-primary">{moment(params.row?.createdAt).format("DD-MM-YYYY")}</div>
+      ),
     },
   ];
 
